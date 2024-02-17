@@ -6,8 +6,7 @@ import clsx from "clsx";
 import Timer from "./timer";
 
 export default function Page() {
-    const text =
-        "I Leave Sisyphus at the foot of the mountain. One always finds one's burden again. But Sisyphus teaches the higher fidelity that negates the gods and raises rocks. He too concludes that all is well. This universe henceforth without a master seems to him neither sterile nor futile. Each atom of that stone, each mineral flake of that night-filled mountain, in itself, forms a world. The struggle itself toward the heights is enough to fill a man's heart. One must imagine Sisyphus happy.";
+    const text = "Hello world yo";
     const letters = text.split("");
     const words = text.split(" ");
 
@@ -17,10 +16,18 @@ export default function Page() {
 
     useEffect(() => {
         setPointer(typed.length - 1);
-    }, [typed]);
+    }, [typed, letters.length]);
 
     function changeHandler(value: string) {
-        setIsTyping(true);
+        // Dirty code here. Some issue with useState not syncing properly thats why had to +1 the typed.length
+        if (typed.length + 1 >= letters.length) {
+            if (isTyping) {
+                setIsTyping(false);
+            }
+        } else if (!isTyping) {
+            setIsTyping(true);
+        }
+
         console.log(value);
         setTyped(value);
         console.log("TYPED", value);

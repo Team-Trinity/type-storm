@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "../_lib/utils";
 
 export default function Timer({
@@ -13,6 +13,7 @@ export default function Timer({
     className: string;
 }) {
     const [timePassed, setTimePassed] = useState(0);
+    const timeRef = useRef<NodeJS.Timeout>();
     const [wpm, setWpm] = useState(0);
 
     const correctLetters = text.split("");
@@ -45,10 +46,19 @@ export default function Timer({
 
     useEffect(() => {
         if (isTyping) {
-            setInterval(() => {
-                setTimePassed((oldTime) => oldTime + 1);
+            timeRef.current = setInterval(() => {
+                // Store the interval reference
+                setTimePassed((prevTime) => prevTime + 1);
             }, 1000);
+        } else {
+            // Clear the interval if typing stops
+            clearInterval(timeRef.current);
         }
+
+        // Clear interval on unmount
+        return () => {
+            clearInterval(timeRef.current);
+        };
     }, [isTyping]);
     return (
         <>
