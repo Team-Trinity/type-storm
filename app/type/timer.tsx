@@ -4,15 +4,19 @@ import { cn } from "../_lib/utils";
 export default function Timer({
     isTyping,
     typedLetters,
-    correctLetters,
+    text,
     className
 }: {
     isTyping: boolean;
     typedLetters: string;
-    correctLetters: string[];
+    text: string;
     className: string;
 }) {
     const [timePassed, setTimePassed] = useState(0);
+    const [wpm, setWpm] = useState(0);
+
+    const correctLetters = text.split("");
+    const words = text.split(" ");
 
     const mistakeCalculator = useCallback(() => {
         let mistake = 0;
@@ -26,6 +30,19 @@ export default function Timer({
         return mistake;
     }, [typedLetters, correctLetters]);
 
+    const wpmCalculator = useCallback(() => {
+        const letterPerMinute =
+            ((typedLetters.length - mistakeCalculator()) / timePassed) * 60;
+        const avgWordLength = correctLetters.length / words.length;
+        return Math.floor(letterPerMinute / avgWordLength);
+    }, [
+        typedLetters,
+        mistakeCalculator,
+        timePassed,
+        correctLetters.length,
+        words.length
+    ]);
+
     useEffect(() => {
         if (isTyping) {
             setInterval(() => {
@@ -33,5 +50,12 @@ export default function Timer({
             }, 1000);
         }
     }, [isTyping]);
-    return <div className={cn(className)}>Speed : {timePassed}</div>;
+    return (
+        <>
+            <div className={cn(className)}>Timer : {timePassed}s</div>
+            <div className={cn(className)}>
+                WPM : {wpmCalculator() ? wpmCalculator() : 0}
+            </div>
+        </>
+    );
 }

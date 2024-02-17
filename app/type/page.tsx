@@ -39,7 +39,7 @@ export default function Page() {
                     className="text-center text-2xl"
                     isTyping={isTyping}
                     typedLetters={typed}
-                    correctLetters={letters}
+                    text={text}
                 />
             </div>
             <div className="relative w-[1000px] p-5 text-xl transition-all">
