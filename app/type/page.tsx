@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Letter from "./letter";
 import clsx from "clsx";
+import Timer from "./timer";
 
 export default function Page() {
     const text =
@@ -18,19 +19,8 @@ export default function Page() {
         setPointer(typed.length - 1);
     }, [typed]);
 
-    const mistakeCalculator = useCallback(() => {
-        let mistake = 0;
-
-        for (let i = 0; i < typed.length; i++) {
-            if (letters[i] !== typed[i]) {
-                mistake++;
-            }
-        }
-
-        return mistake;
-    }, [typed, letters]);
-
     function changeHandler(value: string) {
+        setIsTyping(true);
         console.log(value);
         setTyped(value);
         console.log("TYPED", value);
@@ -43,16 +33,14 @@ export default function Page() {
                 </h1>
                 <h1 className="text-center text-2xl">Pointer : {pointer}</h1> */}
                 <h1 className="text-center text-2xl">
-                    Letters : {letters.length}
-                </h1>
-                <h1 className="text-center text-2xl">Words : {words.length}</h1>
-                <h1 className="text-center text-2xl">
                     Letters Typed : {typed.length}
                 </h1>
-                <h1 className="text-center text-2xl">
-                    Mistakes :{" "}
-                    <span className="text-red-500">{mistakeCalculator()}</span>
-                </h1>
+                <Timer
+                    className="text-center text-2xl"
+                    isTyping={isTyping}
+                    typedLetters={typed}
+                    correctLetters={letters}
+                />
             </div>
             <div className="relative w-[1000px] p-5 text-xl transition-all">
                 <span
@@ -63,17 +51,19 @@ export default function Page() {
                 >
                     |
                 </span>
-                {letters.map((letter, index) => {
-                    return (
-                        <Letter
-                            key={index}
-                            correctLetter={letter}
-                            typedLetter={typed[index]}
-                            isActive={pointer === index}
-                            isTyping={isTyping}
-                        />
-                    );
-                })}
+                <span className="tracking-tighter">
+                    {letters.map((letter, index) => {
+                        return (
+                            <Letter
+                                key={index}
+                                correctLetter={letter}
+                                typedLetter={typed[index]}
+                                isActive={pointer === index}
+                                isTyping={isTyping}
+                            />
+                        );
+                    })}
+                </span>
                 <input
                     autoFocus
                     type="text"
