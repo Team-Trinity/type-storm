@@ -15,14 +15,7 @@ export default function Letter({
     return (
         <>
             {typedLetter && typedLetter !== correctLetter ? (
-                <span
-                    className={cn({
-                        "text-red-400":
-                            correctLetter && typedLetter !== correctLetter,
-                        underline:
-                            correctLetter && typedLetter !== correctLetter
-                    })}
-                >
+                <span className="text-red-400 underline">
                     <span>
                         {correctLetter}
                         <span
@@ -37,7 +30,7 @@ export default function Letter({
                 </span>
             ) : (
                 <span
-                    className={`${isActive ? "text-white" : typedLetter && correctLetter === typedLetter ? "text-green-300" : "text-gray-500"}`}
+                    className={`${typedLetter && correctLetter === typedLetter ? "text-green-300" : "text-gray-500"}`}
                 >
                     <span>
                         {correctLetter}

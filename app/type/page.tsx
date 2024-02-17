@@ -4,9 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import Letter from "./letter";
 import clsx from "clsx";
 import Timer from "./timer";
+import { RotateCcw } from "lucide-react";
 
 export default function Page() {
-    const text = "Hello world yo";
+    const text =
+        "The Matrix is a system, Neo. That system is our enemy. But when you're inside, you look around, what do you see? Businessmen, teachers, lawyers, carpenters. The very minds of the people we are trying to save. But until we do, these people are still a part of that system and that makes them our enemy. You have to understand, most of these people are not ready to be unplugged. And many of them are so inured, so hopelessly dependent on the system, that they will fight to protect it.";
     const letters = text.split("");
     const words = text.split(" ");
 
@@ -31,6 +33,12 @@ export default function Page() {
         console.log(value);
         setTyped(value);
         console.log("TYPED", value);
+    }
+
+    function resetHandler() {
+        setTyped("");
+        setIsTyping(false);
+        setPointer(-1);
     }
     return (
         <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
@@ -79,6 +87,10 @@ export default function Page() {
                     onChange={(e) => changeHandler(e.target.value)}
                 />
             </div>
+            <RotateCcw
+                onClick={resetHandler}
+                className="cursor-pointer text-white"
+            />
         </div>
     );
 }
