@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { cn } from "../_lib/utils";
+import { cn } from "@/lib/utils";
 
 export default function LetterElement({
     correctLetter,
