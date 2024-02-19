@@ -1,3 +1,4 @@
+import useText from "@/hooks/useText";
 import {
     Dispatch,
     MutableRefObject,
@@ -12,7 +13,10 @@ import {
 } from "react";
 
 type contexType = {
+    setText: Dispatch<SetStateAction<string>>;
     timeRef: MutableRefObject<NodeJS.Timeout | undefined>;
+    // Could not figure out the type here. Using any temporarily
+    inputRef: any;
     timePassed: number;
     isTyping: boolean;
     setIsTyping: Dispatch<SetStateAction<boolean>>;
@@ -25,19 +29,18 @@ type contexType = {
     wpmCalculator: () => number;
 };
 
-const text =
-    "The Matrix is a system, Neo. That system is our enemy. But when you're inside, you look around, what do you see? Businessmen, teachers, lawyers, carpenters. The very minds of the people we are trying to save. But until we do, these people are still a part of that system and that makes them our enemy. You have to understand, most of these people are not ready to be unplugged. And many of them are so inured, so hopelessly dependent on the system, that they will fight to protect it.";
-
 export const timerContext = createContext<contexType>({
+    setText: () => {},
     timeRef: { current: undefined }, // Default value for MutableRefObject
+    inputRef: { current: undefined }, // Default value for MutableRefObject
     timePassed: 0,
     isTyping: false,
     setIsTyping: () => {}, // Empty function as default
     resetTimer: () => {}, // Empty function as default
-    letters: text.split(""),
+    letters: [""],
     typedLetters: "",
     setTypedLetters: () => {}, // Empty function as default
-    text: text,
+    text: "",
     pointer: -1,
     wpmCalculator: () => {
         return 0;
@@ -45,11 +48,15 @@ export const timerContext = createContext<contexType>({
 });
 
 const TimerProvider = ({ children }: { children?: ReactNode }) => {
+    const [getText] = useText();
+
+    const [text, setText] = useState("");
     const [timePassed, setTimePassed] = useState(0);
     const timeRef = useRef<NodeJS.Timeout>();
     const [isTyping, setIsTyping] = useState(false);
     const [typedLetters, setTypedLetters] = useState("");
     const [pointer, setPointer] = useState(-1);
+    const inputRef = useRef<HTMLInputElement>();
 
     const correctLetters = text.split("");
     const words = text.split(" ");
@@ -105,6 +112,9 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
     }, [typedLetters.length]);
 
     function resetTimer() {
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
         setIsTyping(false);
         setTimePassed(0);
         clearInterval(timeRef.current);
@@ -113,7 +123,9 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
     return (
         <timerContext.Provider
             value={{
+                setText,
                 timeRef,
+                inputRef,
                 timePassed,
                 isTyping,
                 setIsTyping,
