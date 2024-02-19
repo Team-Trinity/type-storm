@@ -66,11 +66,16 @@ const config = {
                 "accordion-up": {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" }
+                },
+                blinkingCursor: {
+                    "0%, 100%": { color: "#000000" },
+                    "50%": { color: "#FFFFFF" }
                 }
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
-                "accordion-up": "accordion-up 0.2s ease-out"
+                "accordion-up": "accordion-up 0.2s ease-out",
+                blinkingCursor: "blinkingCursor 0.6s ease-in-out infinite"
             }
         }
     },

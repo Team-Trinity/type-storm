@@ -6,7 +6,7 @@ export default function page() {
     return (
         <div>
             <TimerProvider>
-                <TypeBox/>
+                <TypeBox />
             </TimerProvider>
         </div>
     );
