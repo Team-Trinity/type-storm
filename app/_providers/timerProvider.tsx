@@ -6,7 +6,6 @@ import {
     SetStateAction,
     createContext,
     useCallback,
-    useContext,
     useEffect,
     useRef,
     useState
@@ -19,7 +18,9 @@ type contexType = {
     inputRef: any;
     timePassed: number;
     isTyping: boolean;
+    isRunning: boolean;
     setIsTyping: Dispatch<SetStateAction<boolean>>;
+    setIsRunning: Dispatch<SetStateAction<boolean>>;
     resetTimer: () => void;
     letters: string[];
     typedLetters: string;
@@ -35,7 +36,9 @@ export const timerContext = createContext<contexType>({
     inputRef: { current: undefined }, // Default value for MutableRefObject
     timePassed: 0,
     isTyping: false,
+    isRunning: false,
     setIsTyping: () => {}, // Empty function as default
+    setIsRunning: () => {}, // Empty function as default
     resetTimer: () => {}, // Empty function as default
     letters: [""],
     typedLetters: "",
@@ -57,6 +60,7 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
     const [typedLetters, setTypedLetters] = useState("");
     const [pointer, setPointer] = useState(-1);
     const inputRef = useRef<HTMLInputElement>();
+    const [isRunning, setIsRunning] = useState(false);
 
     const correctLetters = text.split("");
     const words = text.split(" ");
@@ -91,7 +95,7 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
     ]);
 
     useEffect(() => {
-        if (isTyping) {
+        if (isRunning) {
             timeRef.current = setInterval(() => {
                 // Store the interval reference
                 setTimePassed((prevTime) => prevTime + 1);
@@ -105,16 +109,29 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
         return () => {
             clearInterval(timeRef.current);
         };
-    }, [isTyping]);
+    }, [isRunning]);
 
     useEffect(() => {
         setPointer(typedLetters.length - 1);
     }, [typedLetters.length]);
 
-    function resetTimer() {
+    function endGame() {
         if (inputRef.current) {
             inputRef.current.value = "";
         }
+        setIsRunning(false);
+        setIsTyping(false);
+        setTimePassed(0);
+        clearInterval(timeRef.current);
+        setTypedLetters("");
+    }
+
+    function resetTimer() {
+        if (inputRef.current) {
+            inputRef.current.value = "";
+            inputRef.current.focus();
+        }
+        setIsRunning(false);
         setIsTyping(false);
         setTimePassed(0);
         clearInterval(timeRef.current);
@@ -128,7 +145,9 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
                 inputRef,
                 timePassed,
                 isTyping,
+                isRunning,
                 setIsTyping,
+                setIsRunning,
                 resetTimer,
                 letters: correctLetters,
                 text,
