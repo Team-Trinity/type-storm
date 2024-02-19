@@ -1,17 +1,20 @@
 import clsx from "clsx";
-import { cn } from "@/lib/utils";
+import { useContext } from "react";
+import { timerContext } from "../_providers/timerProvider";
 
 export default function LetterElement({
     correctLetter,
     typedLetter,
     isActive,
-    isTyping
+    isLast
 }: {
     typedLetter: string;
     correctLetter: string;
     isActive: boolean;
-    isTyping: boolean;
+    isLast: boolean;
 }) {
+    // console.log(correctLetter, isLast);
+    const { isTyping } = useContext(timerContext);
     return (
         <>
             {typedLetter && typedLetter !== correctLetter ? (
@@ -19,7 +22,9 @@ export default function LetterElement({
                     <span>
                         {correctLetter}
                         <span
-                            className={clsx("animate-blinkingCursor", {
+                            className={clsx({
+                                "animate-none": isTyping,
+                                "animate-blinkingCursor": !isLast,
                                 invisible: !isActive
                             })}
                         >
@@ -34,7 +39,9 @@ export default function LetterElement({
                     <span>
                         {correctLetter}
                         <span
-                            className={clsx("animate-blinkingCursor", {
+                            className={clsx({
+                                "animate-none": isTyping,
+                                "animate-blinkingCursor": !isLast,
                                 invisible: !isActive
                             })}
                         >

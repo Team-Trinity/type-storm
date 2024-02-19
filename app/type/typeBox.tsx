@@ -1,21 +1,23 @@
 "use client";
 
+import useText from "@/hooks/useText";
+import { cn } from "@/lib/utils";
 import clsx from "clsx";
 import { RotateCcw } from "lucide-react";
-import { useContext, useEffect, useRef } from "react";
-import TimerProvider, { timerContext } from "../_providers/timerProvider";
+import { JetBrains_Mono } from "next/font/google";
+import { useContext, useEffect } from "react";
+import { timerContext } from "../_providers/timerProvider";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
-import useText from "@/hooks/useText";
-import { JetBrains_Mono } from "next/font/google";
-import { cn } from "@/lib/utils";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
 
 export default function TypeBox() {
     const {
         isTyping,
+        isRunning,
         setIsTyping,
+        setIsRunning,
         resetTimer,
         letters,
         typedLetters,
@@ -32,17 +34,50 @@ export default function TypeBox() {
         setText(getText(20));
     }, []);
 
+    useEffect(() => {
+        if (isRunning) {
+            let typingTimer: NodeJS.Timeout;
+
+            // Function to handle typing start
+            const handleTypingStart = () => {
+                setIsTyping(true);
+            };
+
+            // Function to handle typing end
+            const handleTypingEnd = () => {
+                setIsTyping(false);
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    // Reset after 8 seconds of no typing
+                    console.log("User stopped typing for 8 seconds.");
+                    resetHandler();
+                }, 5000);
+            };
+
+            // Event listeners for typing start and end
+            document.addEventListener("keydown", handleTypingStart);
+            document.addEventListener("keyup", handleTypingEnd);
+
+            return () => {
+                document.removeEventListener("keydown", handleTypingStart);
+                document.removeEventListener("keyup", handleTypingEnd);
+                clearTimeout(typingTimer);
+            };
+        }
+    }, [isRunning]); // Empty dependency array to ensure the effect runs only once
+
     function changeHandler(value: string) {
         // Dirty code here. Some issue with useState not syncing properly thats why had to +1 the typed.length
         if (typedLetters.length + 1 >= letters.length) {
-            setIsTyping(false);
-        } else if (!isTyping) {
-            setIsTyping(true);
+            setIsRunning(false);
+        } else if (typedLetters.length > 0 && !isRunning) {
+            setIsRunning(true);
         }
 
         console.log(value);
         setTypedLetters(value);
         console.log("TYPED", value);
+        console.log("TYPING....", isTyping);
     }
 
     function resetHandler() {
@@ -52,7 +87,7 @@ export default function TypeBox() {
     return (
         <div className="mx-auto mt-60 flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
             <TextSelector />
-            <div className=" flex w-full items-center justify-around">
+            <div className="flex w-full items-center justify-around">
                 <div className="text-center text-2xl">
                     Timer : {timePassed}s
                 </div>
@@ -64,6 +99,7 @@ export default function TypeBox() {
                 className={cn(
                     "relative w-full p-5 text-lg font-semibold transition-all",
                     jetbrains_mono.className
+                    // { "border border-red-200": isTyping }
                 )}
             >
                 <span
@@ -82,7 +118,7 @@ export default function TypeBox() {
                                 correctLetter={letter}
                                 typedLetter={typedLetters[index]}
                                 isActive={pointer === index}
-                                isTyping={isTyping}
+                                isLast={index === letters.length - 1}
                             />
                         );
                     })}
@@ -92,6 +128,7 @@ export default function TypeBox() {
                         autoFocus
                         type="text"
                         ref={inputRef}
+                        disabled={typedLetters.length > 1 && !isRunning}
                         name="type-input"
                         className="absolute left-0 top-0 z-50 h-full w-full opacity-0"
                         onChange={(e) => changeHandler(e.target.value)}
