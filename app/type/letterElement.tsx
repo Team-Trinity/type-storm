@@ -19,8 +19,7 @@ export default function LetterElement({
                     <span>
                         {correctLetter}
                         <span
-                            className={clsx({
-                                "animate-blinkingCursor": !isTyping,
+                            className={clsx("animate-blinkingCursor", {
                                 invisible: !isActive
                             })}
                         >
@@ -35,8 +34,7 @@ export default function LetterElement({
                     <span>
                         {correctLetter}
                         <span
-                            className={clsx({
-                                "animate-blinkingCursor": !isTyping,
+                            className={clsx("animate-blinkingCursor", {
                                 invisible: !isActive
                             })}
                         >
