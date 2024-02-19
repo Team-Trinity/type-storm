@@ -21,7 +21,7 @@ export default function RootLayout({
         <html lang="en">
             <body
                 className={cn(
-                    "min-h-screen bg-background font-sans antialiased",
+                    "flex min-h-screen flex-col bg-background font-sans antialiased",
                     inter.className
                 )}
             >
@@ -31,7 +31,7 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 ></ThemeProvider>
-                <div className="min-h-screen">{children}</div>
+                <main className="flex-grow">{children}</main>
                 <Footer />
             </body>
         </html>
