@@ -21,6 +21,8 @@ type contexType = {
     isRunning: boolean;
     setIsTyping: Dispatch<SetStateAction<boolean>>;
     setIsRunning: Dispatch<SetStateAction<boolean>>;
+    mistake: number;
+    setMistake: Dispatch<SetStateAction<number>>;
     resetTimer: () => void;
     letters: string[];
     typedLetters: string;
@@ -28,7 +30,7 @@ type contexType = {
     text: string;
     pointer: number;
     wpmCalculator: () => number;
-    mistakeCalculator: () => number;
+    accuracy: () => number;
 };
 
 export const timerContext = createContext<contexType>({
@@ -40,6 +42,8 @@ export const timerContext = createContext<contexType>({
     isRunning: false,
     setIsTyping: () => {}, // Empty function as default
     setIsRunning: () => {}, // Empty function as default
+    mistake: 0,
+    setMistake: () => {},
     resetTimer: () => {}, // Empty function as default
     letters: [""],
     typedLetters: "",
@@ -49,7 +53,7 @@ export const timerContext = createContext<contexType>({
     wpmCalculator: () => {
         return 0;
     },
-    mistakeCalculator: () => {
+    accuracy: () => {
         return 0;
     }
 });
@@ -65,25 +69,25 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
     const [pointer, setPointer] = useState(-1);
     const inputRef = useRef<HTMLInputElement>();
     const [isRunning, setIsRunning] = useState(false);
+    const [mistake, setMistake] = useState(0);
 
     const correctLetters = text.split("");
     const words = text.split(" ");
 
-    const mistakeCalculator = useCallback(() => {
-        let mistake = 0;
-
-        for (let i = 0; i < typedLetters.length; i++) {
-            if (correctLetters[i] !== typedLetters[i]) {
-                mistake++;
-            }
+    const accuracy = useCallback(() => {
+        const totalTyped = typedLetters.length;
+        if (totalTyped) {
+            return parseFloat(
+                (((totalTyped - mistake) / totalTyped) * 100).toFixed(2)
+            );
+        } else {
+            return 0;
         }
-
-        return mistake;
-    }, [typedLetters, correctLetters]);
+    }, [typedLetters, mistake]);
 
     const wpmCalculator = useCallback(() => {
         const letterPerMinute =
-            ((typedLetters.length - mistakeCalculator()) / timePassed) * 60;
+            ((typedLetters.length - mistake) / timePassed) * 60;
         const avgWordLength = correctLetters.length / words.length;
         if (timePassed > 0) {
             return Math.floor(letterPerMinute / avgWordLength);
@@ -92,10 +96,10 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
         }
     }, [
         typedLetters,
-        mistakeCalculator,
         timePassed,
         correctLetters.length,
-        words.length
+        words.length,
+        mistake
     ]);
 
     useEffect(() => {
@@ -140,6 +144,7 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
         setTimePassed(0);
         clearInterval(timeRef.current);
         setTypedLetters("");
+        setMistake(0);
     }
     return (
         <timerContext.Provider
@@ -152,6 +157,8 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
                 isRunning,
                 setIsTyping,
                 setIsRunning,
+                mistake,
+                setMistake,
                 resetTimer,
                 letters: correctLetters,
                 text,
@@ -159,7 +166,7 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
                 setTypedLetters,
                 pointer,
                 wpmCalculator,
-                mistakeCalculator
+                accuracy
             }}
         >
             {children}

@@ -27,7 +27,8 @@ export default function TypeBox() {
         wpmCalculator,
         setText,
         inputRef,
-        mistakeCalculator
+        accuracy,
+        mistake
     } = useContext(timerContext);
 
     const [getText] = useText();
@@ -85,30 +86,28 @@ export default function TypeBox() {
         resetTimer();
     }
 
-    const accuracy = useCallback(() => {
-        const totalTyped = typedLetters.length;
-        if (totalTyped) {
-            return (
-                ((totalTyped - mistakeCalculator()) / totalTyped) *
-                100
-            ).toFixed(2);
-        } else {
-            return 0;
-        }
-    }, [typedLetters]);
-
     return (
         <div className="mx-auto mt-60 flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
             <TextSelector />
-            <div className="flex w-full items-center justify-around">
-                <div className="text-center text-2xl">
-                    Timer : {timePassed}s
+            <div className="flex w-full flex-col items-center justify-center gap-2">
+                <div className="flex w-full items-center justify-around">
+                    <div className="text-center text-2xl">
+                        {timePassed}
+                        <span className="text-lg"> s</span>
+                    </div>
+                    <div className="text-center text-2xl">
+                        {wpmCalculator()}
+                        <span className="text-lg"> WPM</span>
+                    </div>
                 </div>
-                <div className="text-center text-2xl">
-                    WPM : {wpmCalculator()}
-                </div>
-                <div className="text-center text-2xl">
-                    Accuracy : {accuracy()}%
+                <div className="flex w-full items-center justify-around">
+                    <div className="text-center text-2xl">
+                        {typedLetters.length}/{letters.length}
+                    </div>
+                    <div className="text-center text-2xl">
+                        {accuracy()}% <span className="text-lg">accuracy</span>
+                        {/* {mistake} <span className="text-lg">mistakes</span> */}
+                    </div>
                 </div>
             </div>
             <div
