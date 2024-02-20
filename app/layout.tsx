@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from "@/components/shared/Footer/Footer";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "./_providers/themeProvider";
+import { NavBar } from "@/components/shared/Footer/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 ></ThemeProvider>
+                <NavBar></NavBar>
                 <main className="flex-grow">{children}</main>
                 <Footer />
             </body>
