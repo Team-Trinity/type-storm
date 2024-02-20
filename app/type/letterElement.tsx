@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { timerContext } from "../_providers/timerProvider";
 
 export default function LetterElement({
@@ -14,7 +14,18 @@ export default function LetterElement({
     isLast: boolean;
 }) {
     // console.log(correctLetter, isLast);
-    const { isTyping } = useContext(timerContext);
+    const { isTyping, mistake, setMistake } = useContext(timerContext);
+    const mistakeRef = useRef(0);
+    useEffect(() => {
+        if (
+            typedLetter &&
+            typedLetter !== correctLetter &&
+            mistakeRef.current === 0
+        ) {
+            mistakeRef.current = 1;
+            setMistake((prevValue) => prevValue + 1);
+        }
+    });
     return (
         <>
             {typedLetter && typedLetter !== correctLetter ? (
