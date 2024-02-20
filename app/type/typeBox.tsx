@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import clsx from "clsx";
 import { RotateCcw } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { timerContext } from "../_providers/timerProvider";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
@@ -26,7 +26,8 @@ export default function TypeBox() {
         timePassed,
         wpmCalculator,
         setText,
-        inputRef
+        inputRef,
+        mistakeCalculator
     } = useContext(timerContext);
 
     const [getText] = useText();
@@ -84,6 +85,18 @@ export default function TypeBox() {
         resetTimer();
     }
 
+    const accuracy = useCallback(() => {
+        const totalTyped = typedLetters.length;
+        if (totalTyped) {
+            return (
+                ((totalTyped - mistakeCalculator()) / totalTyped) *
+                100
+            ).toFixed(2);
+        } else {
+            return 0;
+        }
+    }, [typedLetters]);
+
     return (
         <div className="mx-auto mt-60 flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
             <TextSelector />
@@ -93,6 +106,9 @@ export default function TypeBox() {
                 </div>
                 <div className="text-center text-2xl">
                     WPM : {wpmCalculator()}
+                </div>
+                <div className="text-center text-2xl">
+                    Accuracy : {accuracy()}%
                 </div>
             </div>
             <div
@@ -126,9 +142,15 @@ export default function TypeBox() {
                 {inputRef && (
                     <input
                         autoFocus
+                        maxLength={letters.length}
                         type="text"
                         ref={inputRef}
-                        disabled={typedLetters.length > 1 && !isRunning}
+                        disabled={
+                            typedLetters.length > 1 &&
+                            // Check if the last typed letter is correct or not then disable it
+                            typedLetters.slice(-1) === letters.slice(-1)[0] &&
+                            !isRunning
+                        }
                         name="type-input"
                         className="absolute left-0 top-0 z-50 h-full w-full opacity-0"
                         onChange={(e) => changeHandler(e.target.value)}

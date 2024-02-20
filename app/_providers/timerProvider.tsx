@@ -28,6 +28,7 @@ type contexType = {
     text: string;
     pointer: number;
     wpmCalculator: () => number;
+    mistakeCalculator: () => number;
 };
 
 export const timerContext = createContext<contexType>({
@@ -46,6 +47,9 @@ export const timerContext = createContext<contexType>({
     text: "",
     pointer: -1,
     wpmCalculator: () => {
+        return 0;
+    },
+    mistakeCalculator: () => {
         return 0;
     }
 });
@@ -154,7 +158,8 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
                 typedLetters,
                 setTypedLetters,
                 pointer,
-                wpmCalculator
+                wpmCalculator,
+                mistakeCalculator
             }}
         >
             {children}
