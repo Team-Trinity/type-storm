@@ -1,7 +1,14 @@
-import Image from "next/image";
+"use client";
+
+import TypeBox from "@/components/type/typeBox";
+import TimerProvider from "@/providers/timerProvider";
 
 export default function Home() {
-  return (
-<h1 className="text-2xl font-semibold text-center py-12">This is my homepage</h1>
-  );
+    return (
+        <div>
+            <TimerProvider>
+                <TypeBox />
+            </TimerProvider>
+        </div>
+    );
 }
