@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { RotateCcw } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
 import { useCallback, useContext, useEffect } from "react";
-import { timerContext } from "../_providers/timerProvider";
+import { timerContext } from "@/providers/timerProvider";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
 
@@ -87,7 +87,7 @@ export default function TypeBox() {
     }
 
     return (
-        <div className="mx-auto mt-60 flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
+        <div className="mx-auto mt-52 flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
             <TextSelector />
             <div className="flex w-full flex-col items-center justify-center gap-2">
                 <div className="flex w-full items-center justify-around">
@@ -112,7 +112,7 @@ export default function TypeBox() {
             </div>
             <div
                 className={cn(
-                    "relative w-full p-5 text-lg font-semibold transition-all",
+                    "relative w-full p-5 text-xl font-semibold tracking-tighter transition-all",
                     jetbrains_mono.className
                     // { "border border-red-200": isTyping }
                 )}
@@ -125,7 +125,7 @@ export default function TypeBox() {
                 >
                     |
                 </span>
-                <span className="tracking-tighter">
+                <span>
                     {letters.map((letter, index) => {
                         return (
                             <Letter
@@ -156,10 +156,7 @@ export default function TypeBox() {
                     />
                 )}
             </div>
-            <RotateCcw
-                onClick={resetHandler}
-                className="cursor-pointer text-white"
-            />
+            <RotateCcw onClick={resetHandler} className="cursor-pointer " />
         </div>
     );
 }

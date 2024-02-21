@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { timerContext } from "../_providers/timerProvider";
+import { timerContext } from "@/providers/timerProvider";
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 
