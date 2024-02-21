@@ -12,7 +12,7 @@ const NavBar = () => {
     const router = useRouter();
     return (
         <div>
-            <nav className="flex items-center px-10 py-8">
+            <nav className="flex items-center px-10 py-8 border-b">
                 <div className="flex-grow">
                     {/* <img src="/Logo.svg" alt="navigateui logo" /> */}
                     <h1
