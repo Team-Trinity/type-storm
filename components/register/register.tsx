@@ -5,7 +5,6 @@ import { AuthContext } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Icons } from "../shared/Icons/icons";
 
 export default function Register() {
     const authContext = useContext(AuthContext);
