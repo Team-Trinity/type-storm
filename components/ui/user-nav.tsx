@@ -11,9 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 import { useContext } from "react";
 export function UserNav() {
   const {user, logOut} = useContext(AuthContext)
+  const router = useRouter();
   const exitSession = async() => {
     await logOut()
   }
@@ -44,7 +46,7 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={()=> router.push("/dashboard")}>
               Dashboard
               
             </DropdownMenuItem>
