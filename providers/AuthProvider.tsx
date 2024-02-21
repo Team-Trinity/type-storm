@@ -1,4 +1,4 @@
-import { auth } from '@/config/firebase.config';
+import { auth } from "@/config/firebase.config";
 import {
     GoogleAuthProvider,
     GithubAuthProvider,
@@ -10,13 +10,8 @@ import {
     signOut,
     updateProfile,
     onAuthStateChanged
-} from 'firebase/auth';
-import React, {
-    ReactNode,
-    createContext,
-    useEffect,
-    useState
-} from 'react';
+} from "firebase/auth";
+import React, { ReactNode, createContext, useEffect, useState } from "react";
 
 type createUser = (email: string, password: string) => Promise<UserCredential>;
 type signIn = (email: string, password: string) => Promise<UserCredential>;
@@ -26,15 +21,15 @@ type logOut = () => Promise<void>;
 type updateUser = (user: User, displayName: string) => Promise<void>;
 
 type AuthContextValuesType = {
-    user: User | null,
-    loading: boolean,
-    createUser: createUser,
-    signIn: signIn,
-    googleSignIn: googleSignIn,
-    githubSignIn: githubSignIn,
-    logOut: logOut,
-    updateUser: updateUser
-}
+    user: User | null;
+    loading: boolean;
+    createUser: createUser;
+    signIn: signIn;
+    googleSignIn: googleSignIn;
+    githubSignIn: githubSignIn;
+    logOut: logOut;
+    updateUser: updateUser;
+};
 
 const defaultAuthState: AuthContextValuesType = {
     user: null,
@@ -45,7 +40,7 @@ const defaultAuthState: AuthContextValuesType = {
     githubSignIn: () => Promise.reject(),
     logOut: () => Promise.reject(),
     updateUser: () => Promise.reject()
-}
+};
 
 const googleAuthProvider = new GoogleAuthProvider();
 const githubAuthProvider = new GithubAuthProvider();
@@ -59,50 +54,64 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const createUser: createUser = async (email: string, password: string) => {
         setLoading(true);
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
             setLoading(false);
             return userCredential;
         } catch (error) {
             setLoading(false);
             throw error;
         }
-    }
+    };
 
     const signIn: signIn = async (email: string, password: string) => {
         setLoading(true);
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
             setLoading(false);
             return userCredential;
         } catch (error) {
             setLoading(false);
             throw error;
         }
-    }
+    };
 
     const googleSignIn: googleSignIn = async () => {
         setLoading(true);
         try {
-            const userCredential = await signInWithPopup(auth, googleAuthProvider);
+            const userCredential = await signInWithPopup(
+                auth,
+                googleAuthProvider
+            );
             setLoading(false);
             return userCredential;
         } catch (error) {
             setLoading(false);
             throw error;
         }
-    }
+    };
 
     const githubSignIn: githubSignIn = async () => {
         setLoading(true);
         try {
-            const userCredential = await signInWithPopup(auth, githubAuthProvider);
+            const userCredential = await signInWithPopup(
+                auth,
+                githubAuthProvider
+            );
             setLoading(false);
             return userCredential;
         } catch (error) {
             setLoading(false);
             throw error;
         }
-    }
+    };
 
     const logOut: logOut = async () => {
         setLoading(true);
@@ -113,7 +122,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(false);
             throw error;
         }
-    }
+    };
 
     const updateUser: updateUser = async (user: User, displayName: string) => {
         setLoading(true);
@@ -124,24 +133,38 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(false);
             throw error;
         }
-    }
+    };
 
     useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
-            setUser(currentUser);
-            setLoading(false);
-        });
+        const unSubscribe = onAuthStateChanged(
+            auth,
+            (currentUser: User | null) => {
+                setUser(currentUser);
+                setLoading(false);
+            }
+        );
 
         return () => {
             unSubscribe();
-        }
+        };
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, createUser, signIn, googleSignIn, githubSignIn, logOut, updateUser }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                loading,
+                createUser,
+                signIn,
+                googleSignIn,
+                githubSignIn,
+                logOut,
+                updateUser
+            }}
+        >
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export default AuthProvider;
