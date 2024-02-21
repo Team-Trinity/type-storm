@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useContext, useEffect, useRef } from "react";
-import { timerContext } from "../_providers/timerProvider";
+import { timerContext } from "@/providers/timerProvider";
 
 export default function LetterElement({
     correctLetter,

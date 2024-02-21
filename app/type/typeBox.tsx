@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { RotateCcw } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
 import { useCallback, useContext, useEffect } from "react";
-import { timerContext } from "../_providers/timerProvider";
+import { timerContext } from "@/providers/timerProvider";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
 
