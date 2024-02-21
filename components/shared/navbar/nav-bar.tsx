@@ -1,11 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ThemeToggleButton } from "@/components/ui/themeToggleButton";
+import { UserNav } from "@/components/ui/user-nav";
+import { AuthContext } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
-import React from "react";
+import React, { useContext } from "react";
 
 const NavBar = () => {
+    const { user } = useContext(AuthContext);
     const router = useRouter();
     return (
         <div>
@@ -31,10 +34,18 @@ const NavBar = () => {
                             Statics
                         </li>
                     </ul>
-                    <Button onClick={() => router.push("/login")}>Login</Button>
-                    <Button onClick={() => router.push("register")}>
-                        Register
-                    </Button>
+                    {user ? (
+                        <UserNav></UserNav>
+                    ) : (
+                        <>
+                            <Button onClick={() => router.push("/login")}>
+                                Login
+                            </Button>
+                            <Button onClick={() => router.push("register")}>
+                                Register
+                            </Button>
+                        </>
+                    )}
                     <ThemeToggleButton />
                 </div>
             </nav>
