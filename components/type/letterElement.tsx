@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useContext, useEffect, useRef } from "react";
-import { timerContext } from "../_providers/timerProvider";
+import { timerContext } from "@/providers/timerProvider";
 
 export default function LetterElement({
     correctLetter,
@@ -29,7 +29,7 @@ export default function LetterElement({
     return (
         <>
             {typedLetter && typedLetter !== correctLetter ? (
-                <span className="text-red-400 underline">
+                <span className="text-red-500 underline dark:text-red-400">
                     <span>
                         {correctLetter}
                         <span
@@ -45,7 +45,7 @@ export default function LetterElement({
                 </span>
             ) : (
                 <span
-                    className={`${typedLetter && correctLetter === typedLetter ? "text-green-300" : "text-gray-500"}`}
+                    className={`${typedLetter && correctLetter === typedLetter ? "text-green-500 dark:text-green-300" : "text-gray-500"}`}
                 >
                     <span>
                         {correctLetter}
