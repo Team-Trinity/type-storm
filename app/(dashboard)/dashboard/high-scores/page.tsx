@@ -1,11 +1,13 @@
-import React from 'react'
 
-const page = () => {
-    return (
-        <div className='mt-12 ml-12 text-3xl'>
-        This is the high scores page in the dashboard.<br></br> List of top scorers name and wpm will be added here
-    </div>
-    )
+import { UserClient } from "@/components/tables/user-tables/client";
+import { highScores } from "@/constants/data";
+
+export default function page() {
+  return (
+    <>
+      <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
+        <UserClient data={highScores} />
+      </div>
+    </>
+  );
 }
-
-export default page
