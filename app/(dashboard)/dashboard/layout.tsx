@@ -1,5 +1,5 @@
 
-import NavBar from "@/components/shared/navbar/nav-bar";
+
 import Sidebar from "@/components/shared/sidebar/sidebar";
 import type { Metadata } from "next";
 
