@@ -7,12 +7,12 @@ const AboutDetails = () => {
     const router = useRouter()
     return (
         <div>
-            <section className="from-#52C2FF flex w-full flex-col justify-center py-12 md:py-24 lg:py-32">
+            <section className="from-#52C2FF flex w-full flex-col justify-center py-8 md:py-16 lg:py-20">
                 <div className="container px-4 md:px-6">
-                    <div className="flex flex-col items-center space-y-4 text-center text-gray-400">
+                    <div className="flex flex-col items-center space-y-4 text-center text-gray-300">
                         {/* Text content */}
                         <div className="space-y-2">
-                            <h1 className="text-2xl font-semibold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+                            <h1 className="text-2xl font-semibold tracking-tighter sm:text-1xl md:text-2xl lg:text-3xl">
                                 Welcome to Key Storm
                             </h1>
                             <p className="mx-auto max-w-[700px] pt-4">
@@ -30,7 +30,7 @@ const AboutDetails = () => {
                 </div>
                 {/* Feature Cards */}
                 <div className="container mt-16 flex flex-wrap items-center justify-center gap-9 px-4 md:px-6">
-                    <div className="flex flex-col items-center text-center text-gray-500">
+                    <div className="flex flex-col items-center text-center text-gray-300">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={24}
@@ -52,7 +52,7 @@ const AboutDetails = () => {
                            Take a test and get Global Ranking<br></br> depending on your speed
                         </p>
                     </div>
-                    <div className="flex flex-col items-center text-center text-gray-500">
+                    <div className="flex flex-col items-center text-center text-gray-300">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={24}
@@ -75,7 +75,7 @@ const AboutDetails = () => {
                             Experience lightning fast website. <br></br> Improve your speed fast.
                         </p>
                     </div>
-                    <div className="flex flex-col items-center text-center text-gray-500">
+                    <div className="flex flex-col items-center text-center text-gray-300">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={24}
