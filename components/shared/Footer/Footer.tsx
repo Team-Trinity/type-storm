@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 
 const getCurrentYear = (): number => {
@@ -5,10 +6,11 @@ const getCurrentYear = (): number => {
 }
 
 const Footer = () => {
+
     return (
         <footer>
-            <div className='text-center text-xs'>
-                <p>&copy; {getCurrentYear()} Key Storm | Developed by Team Trinity</p>
+            <div className='text-center text-xs my-5'>
+                <p>&copy; {getCurrentYear()} Key Storm | Developed by <Link href="https://github.com/Team-Trinity" target="_blank">Team Trinity</Link></p>
             </div>
         </footer>
     );
