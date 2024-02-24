@@ -9,6 +9,7 @@ import { useCallback, useContext, useEffect } from "react";
 import { timerContext } from "@/providers/timerProvider";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
+import { Separator } from "../ui/separator";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -87,7 +88,7 @@ export default function TypeBox() {
     }
 
     return (
-        <div className="mx-auto mt-52 flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
+        <div className="mx-auto flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
             <TextSelector />
             <div className="flex w-full flex-col items-center justify-center gap-2">
                 <div className="flex w-full items-center justify-around">
@@ -110,6 +111,7 @@ export default function TypeBox() {
                     </div>
                 </div>
             </div>
+            <Separator />
             <div
                 className={cn(
                     "relative w-full p-5 text-xl font-semibold tracking-tighter transition-all",

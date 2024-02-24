@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.current-word-count {
-  @apply text-white;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
