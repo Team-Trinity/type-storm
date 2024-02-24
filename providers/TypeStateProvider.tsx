@@ -1,3 +1,4 @@
+import useText from "@/hooks/useText";
 import {
     Dispatch,
     MutableRefObject,
@@ -25,7 +26,7 @@ type stateType = {
 type stateAction =
     | { type: "set time"; payload: number }
     | { type: "increase time" }
-    | { type: "set text"; payload: string }
+    | { type: "set text"; payload: number }
     | { type: "set typed"; payload: string }
     | { type: "set running"; payload: boolean }
     | { type: "set end"; payload: boolean }
@@ -64,8 +65,12 @@ export const TypeStateContext = createContext<contexType>({
 });
 
 const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
+    const [getText] = useText();
     const timeRef = useRef<NodeJS.Timeout>();
     const inputRef = useRef<HTMLInputElement>();
+
+    // const correctLetters = state.currentText.split("");
+    // const words = state.currentText.split(" ");
 
     function reducer(
         state: typeof initialState,
@@ -79,20 +84,47 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                 };
             }
             case "increase time": {
+                let wrongLetter = 0;
+                const correctLetters = state.currentText.split("");
+                const words = state.currentText.split(" ");
+
+                for (let i = 0; i < state.typedLetters.length; i++) {
+                    if (correctLetters[i] !== state.typedLetters[i]) {
+                        wrongLetter++;
+                    }
+                }
+                const letterPerMinute =
+                    ((state.typedLetters.length - wrongLetter) /
+                        state.timePassed) *
+                    60;
+                const avgWordLength = correctLetters.length / words.length;
+                let wpm = 0;
+                if (state.timePassed > 0) {
+                    wpm = Math.floor(letterPerMinute / avgWordLength);
+                }
                 return {
                     ...state,
-                    timePassed: state.timePassed + 1
+                    timePassed: state.timePassed + 1,
+                    wpmCount: wpm
                 };
             }
             case "set text": {
                 return {
                     ...state,
-                    currentText: action.payload
+                    currentText: getText(action.payload)
                 };
             }
             case "set typed": {
+                const totalTyped = state.typedLetters.length;
+                let accuracy = parseFloat(
+                    (
+                        ((totalTyped - state.mistakeCount) / totalTyped) *
+                        100
+                    ).toFixed(2)
+                );
                 return {
                     ...state,
+                    accuracy: accuracy,
                     typedLetters: action.payload
                 };
             }
@@ -142,74 +174,6 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
     }
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const correctLetters = state.currentText.split("");
-    const words = state.currentText.split(" ");
-
-    const accuracyCalculator = useCallback(() => {
-        const totalTyped = state.typedLetters.length;
-        if (totalTyped) {
-            dispatch({
-                type: "set accuracy",
-                payload: parseFloat(
-                    (
-                        ((totalTyped - state.mistakeCount) / totalTyped) *
-                        100
-                    ).toFixed(2)
-                )
-            });
-        } else {
-            dispatch({ type: "set accuracy", payload: 0 });
-        }
-    }, [state.typedLetters, state.mistakeCount]);
-
-    useEffect(() => {
-        accuracyCalculator();
-        return () => {
-            accuracyCalculator();
-        };
-    }, [state.typedLetters]);
-
-    const wrongCalculator = useCallback(() => {
-        let wrong = 0;
-
-        for (let i = 0; i < state.typedLetters.length; i++) {
-            if (correctLetters[i] !== state.typedLetters[i]) {
-                wrong++;
-            }
-        }
-
-        return wrong;
-    }, [state.typedLetters, correctLetters]);
-
-    const wpmCalculator = useCallback(() => {
-        const letterPerMinute =
-            ((state.typedLetters.length - wrongCalculator()) /
-                state.timePassed) *
-            60;
-        const avgWordLength = correctLetters.length / words.length;
-        if (state.timePassed > 0) {
-            dispatch({
-                type: "set wpm",
-                payload: Math.floor(letterPerMinute / avgWordLength)
-            });
-        } else {
-            dispatch({ type: "set wpm", payload: 0 });
-        }
-    }, [
-        correctLetters,
-        state.timePassed,
-        state.typedLetters,
-        words,
-        wrongCalculator
-    ]);
-
-    useEffect(() => {
-        wpmCalculator();
-        return () => {
-            wpmCalculator();
-        };
-    }, [state.typedLetters, state.timePassed]);
-
     useEffect(() => {
         if (state.isRunning) {
             timeRef.current = setInterval(() => {
@@ -226,10 +190,6 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
             clearInterval(timeRef.current);
         };
     }, [state.isRunning]);
-
-    // useEffect(() => {
-    //     setPointer(typedLetters.length - 1);
-    // }, [typedLetters.length]);
 
     function endGame() {
         if (inputRef.current) {
@@ -253,6 +213,8 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
         dispatch({ type: "set time", payload: 0 });
         clearInterval(timeRef.current);
         dispatch({ type: "set mistake", payload: 0 });
+        dispatch({ type: "set wpm", payload: 0 });
+        dispatch({ type: "set accuracy", payload: 0 });
         dispatch({ type: "set wrong", payload: 0 });
     }
     return (

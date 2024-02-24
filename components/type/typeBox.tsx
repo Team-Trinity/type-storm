@@ -4,7 +4,7 @@ import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
 import clsx from "clsx";
-import { RotateCcw } from "lucide-react";
+import { ChevronRight, RotateCcw } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
 import { useContext, useEffect } from "react";
 import { Separator } from "../ui/separator";
@@ -19,7 +19,7 @@ export default function TypeBox() {
 
     const [getText] = useText();
     useEffect(() => {
-        dispatch({ type: "set text", payload: getText(20) });
+        dispatch({ type: "set text", payload: 20 });
     }, []);
 
     useEffect(() => {
@@ -69,6 +69,13 @@ export default function TypeBox() {
     }
 
     function resetHandler() {
+        resetTimer();
+    }
+    function nextHandler() {
+        dispatch({
+            type: "set text",
+            payload: state.currentText.split(" ").length
+        });
         resetTimer();
     }
 
@@ -147,7 +154,22 @@ export default function TypeBox() {
                     />
                 )}
             </div>
-            <RotateCcw onClick={resetHandler} className="cursor-pointer " />
+            <div className="flex w-full items-center justify-center gap-20">
+                <div className="flex flex-col items-center justify-center gap-1">
+                    <RotateCcw
+                        onClick={resetHandler}
+                        className="cursor-pointer "
+                    />
+                    <h3 className="text-sm">Reset</h3>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-1">
+                    <ChevronRight
+                        onClick={nextHandler}
+                        className="cursor-pointer "
+                    />
+                    <h3 className="text-sm">Next</h3>
+                </div>
+            </div>
         </div>
     );
 }
