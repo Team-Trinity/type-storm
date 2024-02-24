@@ -1,5 +1,6 @@
 import {
     Dispatch,
+    MutableRefObject,
     ReactNode,
     createContext,
     useCallback,
@@ -23,6 +24,7 @@ type stateType = {
 
 type stateAction =
     | { type: "set time"; payload: number }
+    | { type: "increase time" }
     | { type: "set text"; payload: string }
     | { type: "set typed"; payload: string }
     | { type: "set running"; payload: boolean }
@@ -36,6 +38,9 @@ type stateAction =
 type contexType = {
     state: stateType;
     dispatch: Dispatch<stateAction>;
+    timeRef: MutableRefObject<NodeJS.Timeout | undefined>;
+    inputRef: any;
+    resetTimer: () => void;
 };
 const initialState: stateType = {
     timePassed: 0,
@@ -50,12 +55,15 @@ const initialState: stateType = {
     accuracy: 0
 };
 
-export const timerContext = createContext<contexType>({
+export const TypeStateContext = createContext<contexType>({
     state: initialState,
-    dispatch: () => initialState
+    dispatch: () => initialState,
+    timeRef: { current: undefined }, // Default value for MutableRefObject
+    inputRef: { current: undefined },
+    resetTimer: () => {} // Empty function as default
 });
 
-const TimerProvider = ({ children }: { children?: ReactNode }) => {
+const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
     const timeRef = useRef<NodeJS.Timeout>();
     const inputRef = useRef<HTMLInputElement>();
 
@@ -68,6 +76,12 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
                 return {
                     ...state,
                     timePassed: action.payload
+                };
+            }
+            case "increase time": {
+                return {
+                    ...state,
+                    timePassed: state.timePassed + 1
                 };
             }
             case "set text": {
@@ -131,44 +145,76 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
     const correctLetters = state.currentText.split("");
     const words = state.currentText.split(" ");
 
-    const accuracy = useCallback(() => {
+    const accuracyCalculator = useCallback(() => {
         const totalTyped = state.typedLetters.length;
         if (totalTyped) {
-            return parseFloat(
-                (
-                    ((totalTyped - state.mistakeCount) / totalTyped) *
-                    100
-                ).toFixed(2)
-            );
+            dispatch({
+                type: "set accuracy",
+                payload: parseFloat(
+                    (
+                        ((totalTyped - state.mistakeCount) / totalTyped) *
+                        100
+                    ).toFixed(2)
+                )
+            });
         } else {
-            return 0;
+            dispatch({ type: "set accuracy", payload: 0 });
         }
     }, [state.typedLetters, state.mistakeCount]);
 
+    useEffect(() => {
+        accuracyCalculator();
+        return () => {
+            accuracyCalculator();
+        };
+    }, [state.typedLetters]);
+
+    const wrongCalculator = useCallback(() => {
+        let wrong = 0;
+
+        for (let i = 0; i < state.typedLetters.length; i++) {
+            if (correctLetters[i] !== state.typedLetters[i]) {
+                wrong++;
+            }
+        }
+
+        return wrong;
+    }, [state.typedLetters, correctLetters]);
+
     const wpmCalculator = useCallback(() => {
         const letterPerMinute =
-            ((state.typedLetters.length - state.mistakeCount) /
-                state.mistakeCount) *
+            ((state.typedLetters.length - wrongCalculator()) /
+                state.timePassed) *
             60;
         const avgWordLength = correctLetters.length / words.length;
         if (state.timePassed > 0) {
-            return Math.floor(letterPerMinute / avgWordLength);
+            dispatch({
+                type: "set wpm",
+                payload: Math.floor(letterPerMinute / avgWordLength)
+            });
         } else {
-            return 0;
+            dispatch({ type: "set wpm", payload: 0 });
         }
     }, [
         correctLetters,
-        state.mistakeCount,
         state.timePassed,
         state.typedLetters,
-        words
+        words,
+        wrongCalculator
     ]);
+
+    useEffect(() => {
+        wpmCalculator();
+        return () => {
+            wpmCalculator();
+        };
+    }, [state.typedLetters, state.timePassed]);
 
     useEffect(() => {
         if (state.isRunning) {
             timeRef.current = setInterval(() => {
                 // Store the interval reference
-                dispatch({ type: "set time", payload: state.timePassed + 1 });
+                dispatch({ type: "increase time" });
             }, 1000);
         } else {
             // Clear the interval if typing stops
@@ -193,7 +239,7 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
         dispatch({ type: "set typing", payload: false });
         dispatch({ type: "set time", payload: 0 });
         clearInterval(timeRef.current);
-        dispatch({ type: "set text", payload: "" });
+        dispatch({ type: "set wrong", payload: 0 });
     }
 
     function resetTimer() {
@@ -201,24 +247,27 @@ const TimerProvider = ({ children }: { children?: ReactNode }) => {
             inputRef.current.value = "";
             inputRef.current.focus();
         }
+        dispatch({ type: "set typed", payload: "" });
         dispatch({ type: "set running", payload: false });
         dispatch({ type: "set typing", payload: false });
         dispatch({ type: "set time", payload: 0 });
         clearInterval(timeRef.current);
-        dispatch({ type: "set text", payload: "" });
         dispatch({ type: "set mistake", payload: 0 });
         dispatch({ type: "set wrong", payload: 0 });
     }
     return (
-        <timerContext.Provider
+        <TypeStateContext.Provider
             value={{
                 state,
-                dispatch
+                dispatch,
+                timeRef,
+                inputRef,
+                resetTimer
             }}
         >
             {children}
-        </timerContext.Provider>
+        </TypeStateContext.Provider>
     );
 };
 
-export default TimerProvider;
+export default TypeStateProvider;

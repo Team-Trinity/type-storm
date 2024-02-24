@@ -1,6 +1,6 @@
+import { TypeStateContext } from "@/providers/TypeStateProvider";
 import clsx from "clsx";
 import { useContext, useEffect, useRef } from "react";
-import { timerContext } from "@/providers/timerProvider";
 
 export default function LetterElement({
     correctLetter,
@@ -14,7 +14,7 @@ export default function LetterElement({
     isLast: boolean;
 }) {
     // console.log(correctLetter, isLast);
-    const { isTyping, mistake, setMistake } = useContext(timerContext);
+    const { state, dispatch } = useContext(TypeStateContext);
     const mistakeRef = useRef(0);
     useEffect(() => {
         if (
@@ -23,7 +23,7 @@ export default function LetterElement({
             mistakeRef.current === 0
         ) {
             mistakeRef.current = 1;
-            setMistake((prevValue) => prevValue + 1);
+            dispatch({ type: "set mistake", payload: state.mistakeCount + 1 });
         }
     });
     return (
@@ -34,7 +34,7 @@ export default function LetterElement({
                         {correctLetter}
                         <span
                             className={clsx({
-                                "animate-none": isTyping,
+                                "animate-none": state.isTyping,
                                 "animate-blinkingCursor": !isLast,
                                 invisible: !isActive
                             })}
@@ -51,7 +51,7 @@ export default function LetterElement({
                         {correctLetter}
                         <span
                             className={clsx({
-                                "animate-none": isTyping,
+                                "animate-none": state.isTyping,
                                 "animate-blinkingCursor": !isLast,
                                 invisible: !isActive
                             })}

@@ -1,10 +1,10 @@
-import { useContext, useRef, useState } from "react";
-import { timerContext } from "@/providers/timerProvider";
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
+import { TypeStateContext } from "@/providers/TypeStateProvider";
+import { useContext, useRef, useState } from "react";
 
 export default function TextSelector() {
-    const { setText, resetTimer, inputRef } = useContext(timerContext);
+    const { dispatch, resetTimer, inputRef } = useContext(TypeStateContext);
     const [getText] = useText();
     const [selected, setSelected] = useState(0);
     const selectorRef = useRef();
@@ -20,7 +20,10 @@ export default function TextSelector() {
                             key={index}
                             onClick={(e) => {
                                 setSelected(index);
-                                setText(getText(count));
+                                dispatch({
+                                    type: "set text",
+                                    payload: getText(count)
+                                });
                                 resetTimer();
                                 if (inputRef.current) {
                                     inputRef.current.focus();
