@@ -3,12 +3,20 @@
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
-import { ChevronRight, Lock, RotateCcw, Trophy } from "lucide-react";
+import {
+    ChevronRight,
+    Disc2,
+    Lock,
+    RefreshCw,
+    RotateCcw,
+    Trophy
+} from "lucide-react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
+import { Skeleton } from "../ui/skeleton";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -17,7 +25,7 @@ export default function TypeBox() {
     const { state, dispatch, inputRef, resetTimer } =
         useContext(TypeStateContext);
 
-    const [isOverlay, setIsOverlay] = useState(true);
+    const [isOverlay, setIsOverlay] = useState(false);
 
     const [getText] = useText();
     useEffect(() => {
@@ -176,7 +184,8 @@ export default function TypeBox() {
                 )}
                 {/* End Screen */}
                 {!state.isRunning &&
-                    state.typedLetters.length === state.currentText.length && (
+                    state.typedLetters.length === state.currentText.length &&
+                    state.currentText.length > 0 && (
                         <div
                             className={cn(
                                 "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
@@ -198,6 +207,17 @@ export default function TypeBox() {
                             </div>
                         </div>
                     )}
+                {/* Loading Skeleton */}
+                {state.currentText.length === 0 && (
+                    <div
+                        className={cn(
+                            "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-center text-xl backdrop-blur-md transition-all",
+                            inter.className
+                        )}
+                    >
+                        <RefreshCw size={90} className="animate-spin" />
+                    </div>
+                )}
             </div>
             <div className="flex w-full items-center justify-center gap-20">
                 <div className="flex flex-col items-center justify-center gap-1">
