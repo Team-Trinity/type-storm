@@ -10,6 +10,7 @@ import { useContext, useEffect } from "react";
 import { Separator } from "../ui/separator";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
+import { Progress } from "../ui/progress";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -80,31 +81,30 @@ export default function TypeBox() {
     }
 
     return (
-        <div className="mx-auto flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-10 transition-all">
+        <div className="mx-auto flex w-[calc(100vw*0.7)] flex-col items-center justify-center gap-5 transition-all">
             <TextSelector />
-            <div className="flex w-full flex-col items-center justify-center gap-2">
-                <div className="flex w-full items-center justify-around">
-                    <div className="text-center text-2xl">
-                        {state.timePassed}
-                        <span className="text-lg"> s</span>
-                    </div>
+            <div className="grid w-full grid-cols-2 items-center justify-center gap-2">
+                <div className="row-span-2 w-full text-center text-5xl">
+                    {state.timePassed}
+                    <span className="text-lg"> s</span>
+                </div>
+                <div className="flex w-full flex-col items-center justify-around">
                     <div className="text-center text-2xl">
                         {state.wpmCount}
                         <span className="text-lg"> WPM</span>
                     </div>
-                </div>
-                <div className="flex w-full items-center justify-around">
-                    <div className="text-center text-2xl">
-                        {state.typedLetters.length}/{state.currentText.length}
-                    </div>
                     <div className="text-center text-2xl">
                         {state.accuracy}%{" "}
                         <span className="text-lg">accuracy</span>
-                        {/* {mistake} <span className="text-lg">mistakes</span> */}
                     </div>
                 </div>
             </div>
-            <Separator />
+            <Progress
+                value={
+                    (state.typedLetters.length * 100) / state.currentText.length
+                }
+                className="my-2 h-1"
+            />
             <div
                 className={cn(
                     "relative w-full p-5 text-xl font-semibold tracking-tighter transition-all",
