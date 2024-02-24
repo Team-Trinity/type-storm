@@ -1,8 +1,10 @@
-import { faker } from "@faker-js/faker";
+import { generate, count } from "random-words";
 
 export default function useText() {
     function getText(length: number) {
-        return faker.word.words({ count: length });
+        const wordArray = generate(length) as string[];
+        console.log(wordArray);
+        return wordArray.join(" ");
     }
 
     return [getText];

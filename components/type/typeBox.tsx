@@ -3,20 +3,21 @@
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
-import clsx from "clsx";
-import { ChevronRight, RotateCcw } from "lucide-react";
-import { JetBrains_Mono } from "next/font/google";
-import { useContext, useEffect } from "react";
-import { Separator } from "../ui/separator";
+import { ChevronRight, Lock, RotateCcw, Trophy } from "lucide-react";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import { useContext, useEffect, useState } from "react";
+import { Progress } from "../ui/progress";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
-import { Progress } from "../ui/progress";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] });
 
 export default function TypeBox() {
     const { state, dispatch, inputRef, resetTimer } =
         useContext(TypeStateContext);
+
+    const [isOverlay, setIsOverlay] = useState(true);
 
     const [getText] = useText();
     useEffect(() => {
@@ -107,20 +108,24 @@ export default function TypeBox() {
             />
             <div
                 className={cn(
-                    "relative w-full p-5 text-xl font-semibold tracking-tighter transition-all",
+                    "relative min-h-80 w-full p-5 text-xl font-semibold tracking-tighter transition-all",
                     jetbrains_mono.className
                     // { "border border-red-200": isTyping }
                 )}
             >
                 <span
-                    className={clsx({
-                        "animate-blinkingCursor": !state.isTyping,
-                        invisible: state.typedLetters.length !== 0
-                    })}
+                    className={cn(
+                        {
+                            "animate-blinkingCursor":
+                                !state.isTyping && state.isRunning,
+                            invisible: state.typedLetters.length !== 0
+                        },
+                        "-z-50"
+                    )}
                 >
                     |
                 </span>
-                <span>
+                <span className="-z-50 transition-all">
                     {state.currentText.split("").map((letter, index) => {
                         return (
                             <Letter
@@ -138,6 +143,10 @@ export default function TypeBox() {
                 {inputRef && (
                     <input
                         autoFocus
+                        onFocus={() => setIsOverlay(false)}
+                        onBlur={() =>
+                            state.currentText.length > 0 && setIsOverlay(true)
+                        }
                         maxLength={state.currentText.length}
                         type="text"
                         ref={inputRef}
@@ -153,6 +162,42 @@ export default function TypeBox() {
                         onChange={(e) => changeHandler(e.target.value)}
                     />
                 )}
+                {/* Focus loss overlay */}
+                {isOverlay && (
+                    <div
+                        className={cn(
+                            "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-center gap-5 text-4xl opacity-100 backdrop-blur-sm transition-all",
+                            inter.className
+                        )}
+                    >
+                        <Lock size={64} />
+                        <h2>Click to Type</h2>
+                    </div>
+                )}
+                {/* End Screen */}
+                {!state.isRunning &&
+                    state.typedLetters.length === state.currentText.length && (
+                        <div
+                            className={cn(
+                                "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
+                                inter.className
+                            )}
+                        >
+                            <Trophy className="mb-5 mt-2 " size={90} />
+                            <div className="text-center text-6xl">
+                                {state.wpmCount}
+                                <span className="text-3xl"> WPM</span>
+                            </div>
+                            {/* <div className="row-span-2 w-full text-center text-4xl">
+                                {state.timePassed}
+                                <span className="text-xl"> s</span>
+                            </div> */}
+                            <div className="text-center text-5xl">
+                                {state.accuracy}%{" "}
+                                <span className="text-3xl">accuracy</span>
+                            </div>
+                        </div>
+                    )}
             </div>
             <div className="flex w-full items-center justify-center gap-20">
                 <div className="flex flex-col items-center justify-center gap-1">
@@ -160,7 +205,7 @@ export default function TypeBox() {
                         onClick={resetHandler}
                         className="cursor-pointer "
                     />
-                    <h3 className="text-sm">Reset</h3>
+                    <h3 className="text-sm">Restart</h3>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-1">
                     <ChevronRight
