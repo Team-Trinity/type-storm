@@ -17,7 +17,7 @@ export default function TypeBox() {
     const { state, dispatch, inputRef, resetTimer } =
         useContext(TypeStateContext);
 
-    const [isOverlay, setIsOverlay] = useState(true);
+    const [isOverlay, setIsOverlay] = useState(false);
 
     const [getText] = useText();
     useEffect(() => {
@@ -176,7 +176,8 @@ export default function TypeBox() {
                 )}
                 {/* End Screen */}
                 {!state.isRunning &&
-                    state.typedLetters.length === state.currentText.length && (
+                    state.typedLetters.length === state.currentText.length &&
+                    state.currentText.length > 0 && (
                         <div
                             className={cn(
                                 "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
