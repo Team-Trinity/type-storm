@@ -1,14 +1,14 @@
 "use client";
 
 import TypeBox from "@/components/type/typeBox";
-import TimerProvider from "@/providers/timerProvider";
+import TypeStateProvider from "@/providers/TypeStateProvider";
 
 export default function Home() {
     return (
         <div>
-            <TimerProvider>
+            <TypeStateProvider>
                 <TypeBox />
-            </TimerProvider>
+            </TypeStateProvider>
         </div>
     );
 }

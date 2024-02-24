@@ -12,7 +12,7 @@ const NavBar = () => {
     const router = useRouter();
     return (
         <div>
-            <nav className="flex items-center px-10 py-8 border-b">
+            <nav className="mb-20 flex items-center border-b px-10 py-8">
                 <div className="flex-grow">
                     {/* <img src="/Logo.svg" alt="navigateui logo" /> */}
                     <h1
@@ -30,7 +30,10 @@ const NavBar = () => {
                         >
                             Home
                         </li>
-                        <li className="cursor-pointer hover:text-sky-500" onClick={() => router.push("/about-us")}>
+                        <li
+                            className="cursor-pointer hover:text-sky-500"
+                            onClick={() => router.push("/about-us")}
+                        >
                             About Us
                         </li>
                     </ul>
@@ -38,10 +41,16 @@ const NavBar = () => {
                         <UserNav></UserNav>
                     ) : (
                         <>
-                            <Button onClick={() => router.push("/login")} className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                            <Button
+                                onClick={() => router.push("/login")}
+                                className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50"
+                            >
                                 Login
                             </Button>
-                            <Button onClick={() => router.push("register")} className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                            <Button
+                                onClick={() => router.push("register")}
+                                className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50"
+                            >
                                 Register
                             </Button>
                         </>

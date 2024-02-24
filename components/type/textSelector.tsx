@@ -1,26 +1,29 @@
-import { useContext, useRef, useState } from "react";
-import { timerContext } from "@/providers/timerProvider";
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
+import { TypeStateContext } from "@/providers/TypeStateProvider";
+import { useContext, useRef, useState } from "react";
 
 export default function TextSelector() {
-    const { setText, resetTimer, inputRef } = useContext(timerContext);
+    const { dispatch, resetTimer, inputRef } = useContext(TypeStateContext);
     const [getText] = useText();
     const [selected, setSelected] = useState(0);
     const selectorRef = useRef();
 
-    const wordCount = [20, 60, 80, 100];
+    const wordCount = [20, 40, 60, 80];
     return (
         <div className="flex items-center justify-center gap-10 text-lg">
-            <h3>Word Count :</h3>
-            <div className="flex items-center justify-center gap-5 text-gray-500">
+            <h3 className="hidden md:block">Word Count :</h3>
+            <div className="flex items-center justify-center gap-5 text-muted-foreground">
                 {wordCount.map((count, index) => {
                     return (
                         <div
                             key={index}
                             onClick={(e) => {
                                 setSelected(index);
-                                setText(getText(count));
+                                dispatch({
+                                    type: "set text",
+                                    payload: getText(count)
+                                });
                                 resetTimer();
                                 if (inputRef.current) {
                                     inputRef.current.focus();
@@ -28,9 +31,10 @@ export default function TextSelector() {
                             }}
                             className={cn(
                                 {
-                                    "current-word-count": index === selected
+                                    "bg-muted text-foreground":
+                                        index === selected
                                 },
-                                "cursor-pointer hover:text-gray-400"
+                                "cursor-pointer rounded-full px-2 py-1 hover:text-foreground"
                             )}
                         >
                             {count}
