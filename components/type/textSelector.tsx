@@ -22,7 +22,7 @@ export default function TextSelector() {
                                 setSelected(index);
                                 dispatch({
                                     type: "set text",
-                                    payload: getText(count)
+                                    payload: count
                                 });
                                 resetTimer();
                                 if (inputRef.current) {
