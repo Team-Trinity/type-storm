@@ -1,8 +1,10 @@
 import useText from "@/hooks/useText";
 import {
     Dispatch,
+    LegacyRef,
     MutableRefObject,
     ReactNode,
+    RefObject,
     createContext,
     useCallback,
     useEffect,
@@ -40,7 +42,7 @@ type contexType = {
     state: stateType;
     dispatch: Dispatch<stateAction>;
     timeRef: MutableRefObject<NodeJS.Timeout | undefined>;
-    inputRef: any;
+    inputRef: RefObject<HTMLInputElement>;
     resetTimer: () => void;
 };
 const initialState: stateType = {
@@ -60,14 +62,14 @@ export const TypeStateContext = createContext<contexType>({
     state: initialState,
     dispatch: () => initialState,
     timeRef: { current: undefined }, // Default value for MutableRefObject
-    inputRef: { current: undefined },
+    inputRef: { current: null },
     resetTimer: () => {} // Empty function as default
 });
 
 const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
     const [getText] = useText();
     const timeRef = useRef<NodeJS.Timeout>();
-    const inputRef = useRef<HTMLInputElement>();
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // const correctLetters = state.currentText.split("");
     // const words = state.currentText.split(" ");
