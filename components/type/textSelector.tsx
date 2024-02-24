@@ -12,7 +12,7 @@ export default function TextSelector() {
     const wordCount = [20, 40, 60, 80];
     return (
         <div className="flex items-center justify-center gap-10 text-lg">
-            <h3 className="hidden md:block">Word Count :</h3>
+            <h3 className="hidden font-bold md:block">Word Count :</h3>
             <div className="flex items-center justify-center gap-5 text-muted-foreground">
                 {wordCount.map((count, index) => {
                     return (
@@ -34,7 +34,7 @@ export default function TextSelector() {
                                     "bg-muted text-foreground":
                                         index === selected
                                 },
-                                "cursor-pointer rounded-full px-2 py-1 hover:text-foreground"
+                                "cursor-pointer rounded-full px-2 py-1 font-semibold hover:text-foreground"
                             )}
                         >
                             {count}
