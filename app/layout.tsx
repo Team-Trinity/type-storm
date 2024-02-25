@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "Type Storm",
-    description: "A touch typing practice and speed checker website"
+    description: "A touch typing practice and speed checking website"
 };
 
 export default function RootLayout({
