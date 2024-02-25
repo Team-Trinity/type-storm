@@ -1,4 +1,3 @@
-"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/providers/AuthProvider";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 export function UserNav() {
     const { user, logOut } = useContext(AuthContext);
-    const router = useRouter();
     const exitSession = async () => {
         await logOut();
     };

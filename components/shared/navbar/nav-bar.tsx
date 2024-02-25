@@ -4,13 +4,11 @@ import { ThemeToggleButton } from "@/components/ui/themeToggleButton";
 import { UserNav } from "@/components/ui/user-nav";
 import { AuthContext } from "@/providers/AuthProvider";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 const NavBar = () => {
     const { user } = useContext(AuthContext);
-    const router = useRouter();
     return (
         <div>
             <nav className="mb-20 flex items-center border-b px-10 py-8">
@@ -25,10 +23,7 @@ const NavBar = () => {
                 <div className="flex items-center justify-between gap-8">
                     <ul className="flex items-center justify-between gap-10">
                         <Link href={"/"}>
-                            <li
-                                className="cursor-pointer hover:text-sky-500"
-                                onClick={() => router.push("/")}
-                            >
+                            <li className="cursor-pointer hover:text-sky-500">
                                 Home
                             </li>
                         </Link>

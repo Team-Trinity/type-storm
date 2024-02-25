@@ -1,11 +1,7 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
-    const router = useRouter();
     return (
         <nav className={cn(`relative hidden h-screen w-72 border-r lg:block`)}>
             <div className="space-y-4 py-4">
