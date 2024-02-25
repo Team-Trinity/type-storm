@@ -1,10 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import AuthProvider from "@/providers/AuthProvider";
-import { Link } from "@radix-ui/react-navigation-menu";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
 
 export default function Sidebar() {
     const router = useRouter();
@@ -13,26 +11,23 @@ export default function Sidebar() {
             <div className="space-y-4 py-4">
                 <div className="px-3 py-2">
                     <div className="space-y-1">
-                        <h2
-                            className="mb-2 cursor-pointer px-4 text-xl font-semibold tracking-tight pb-2 hover:underline"
-                            onClick={() => router.push("/dashboard")}
-                        >
-                            Overview
-                        </h2>
-                        <h2
-                            className="mb-2 cursor-pointer px-4 text-xl font-semibold tracking-tight pb-2 hover:underline"
-                            onClick={() => router.push("/dashboard/profile")}
-                        >
-                            {/* <Link href="/dashboard/profile">Profile</Link> */}
-                            Profile
-                        </h2>
-                        <h2
-                            className="mb-2 cursor-pointer px-4 text-xl font-semibold tracking-tight pb-2 hover:underline"
-                            onClick={() => router.push("/dashboard/high-scores")}
-                        >
-                            {/* <Link href="/dashboard/profile">Profile</Link> */}
-                            High Scores
-                        </h2>
+                        <Link href={"/dashboard"}>
+                            <h2 className="mb-2 cursor-pointer px-4 pb-2 text-xl font-semibold tracking-tight hover:underline">
+                                Overview
+                            </h2>
+                        </Link>
+                        <Link href={"/dashboard/profile"}>
+                            <h2 className="mb-2 cursor-pointer px-4 pb-2 text-xl font-semibold tracking-tight hover:underline">
+                                {/* <Link href="/dashboard/profile">Profile</Link> */}
+                                Profile
+                            </h2>
+                        </Link>
+                        <Link href={"/dashboard/high-scores"}>
+                            <h2 className="mb-2 cursor-pointer px-4 pb-2 text-xl font-semibold tracking-tight hover:underline">
+                                {/* <Link href="/dashboard/profile">Profile</Link> */}
+                                High Scores
+                            </h2>
+                        </Link>
                         {/* <h2
                             className="mb-2 cursor-pointer px-4 text-xl font-semibold tracking-tight"
                             onClick={() => router.push("/")}
