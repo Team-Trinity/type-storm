@@ -1,10 +1,7 @@
-"use client"
-import React from "react";
+import Link from "next/link";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 
 const AboutDetails = () => {
-    const router = useRouter()
     return (
         <div>
             <section className="from-#52C2FF flex w-full flex-col justify-center py-8 md:py-16 lg:py-20">
@@ -12,7 +9,7 @@ const AboutDetails = () => {
                     <div className="flex flex-col items-center space-y-4 text-center text-gray-300">
                         {/* Text content */}
                         <div className="space-y-2">
-                            <h1 className="text-2xl font-semibold tracking-tighter sm:text-1xl md:text-2xl lg:text-3xl">
+                            <h1 className="sm:text-1xl text-2xl font-semibold tracking-tighter md:text-2xl lg:text-3xl">
                                 Welcome to Key Storm
                             </h1>
                             <p className="mx-auto max-w-[700px] pt-4">
@@ -20,11 +17,11 @@ const AboutDetails = () => {
                             </p>
                         </div>
                         <div className="space-x-4 pt-4">
-                        <Button onClick={() => router.push("/")} 
-                                className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50"
-                            >
-                                Test Your Skill
-                            </Button>
+                            <Link href={"/"}>
+                                <Button className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                    Test Your Skill
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -47,9 +44,12 @@ const AboutDetails = () => {
                             <line x1={2} x2={22} y1={12} y2={12} />
                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                         </svg>
-                        <h3 className="text-lg font-semibold">Global Ranking</h3>
+                        <h3 className="text-lg font-semibold">
+                            Global Ranking
+                        </h3>
                         <p className="text-sm">
-                           Take a test and get Global Ranking<br></br> depending on your speed
+                            Take a test and get Global Ranking<br></br>{" "}
+                            depending on your speed
                         </p>
                     </div>
                     <div className="flex flex-col items-center text-center text-gray-300">
@@ -72,7 +72,8 @@ const AboutDetails = () => {
                             Fast and Efficient
                         </h3>
                         <p className="text-sm">
-                            Experience lightning fast website. <br></br> Improve your speed fast.
+                            Experience lightning fast website. <br></br> Improve
+                            your speed fast.
                         </p>
                     </div>
                     <div className="flex flex-col items-center text-center text-gray-300">
@@ -94,7 +95,8 @@ const AboutDetails = () => {
                             Loved by Users
                         </h3>
                         <p className="text-sm">
-                            Signup to join our community of happy users. <br></br> Track your progess through us.
+                            Signup to join our community of happy users.{" "}
+                            <br></br> Track your progess through us.
                         </p>
                     </div>
                 </div>

@@ -3,20 +3,12 @@
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
-import {
-    ChevronRight,
-    Disc2,
-    Lock,
-    RefreshCw,
-    RotateCcw,
-    Trophy
-} from "lucide-react";
+import { ChevronRight, Lock, RefreshCw, RotateCcw, Trophy } from "lucide-react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
-import { Skeleton } from "../ui/skeleton";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
