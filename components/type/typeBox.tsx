@@ -3,7 +3,7 @@
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
-import { ChevronRight, Lock, RefreshCw, RotateCcw, Trophy } from "lucide-react";
+import { ChevronRight, RefreshCw, RotateCcw, Trophy, MousePointerClick } from "lucide-react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
@@ -200,8 +200,8 @@ export default function TypeBox() {
                             inter.className
                         )}
                     >
-                        <Lock size={64} />
-                        <h2>Click to Type</h2>
+                        <MousePointerClick size={64} />
+                        <h2>Click here to type</h2>
                     </div>
                 )}
                 {/* End Screen */}
