@@ -155,6 +155,36 @@ export default function TypeBox() {
                         onBlur={() =>
                             state.currentText.length > 0 && setIsOverlay(true)
                         }
+                        //disable various interactions on input box
+                        onCopy={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onCut={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onPaste={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onSelect={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onDrag={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                        style={{
+                            WebkitUserSelect: "none",
+                            msUserSelect: "none",
+                            MozUserSelect: "none"
+                        }}
                         maxLength={state.currentText.length}
                         type="text"
                         ref={inputRef}
@@ -166,7 +196,7 @@ export default function TypeBox() {
                             !state.isRunning
                         }
                         name="type-input"
-                        className="absolute left-0 top-0 z-50 h-full w-full opacity-0"
+                        className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-0"
                         onChange={(e) => changeHandler(e.target.value)}
                     />
                 )}
