@@ -37,6 +37,7 @@ type stateAction =
     | { type: "set mistake"; payload: number }
     | { type: "set wrong"; payload: number }
     | { type: "set wpm"; payload: number }
+    | { type: "set cpm"; payload: number }
     | { type: "set accuracy"; payload: number }
     | { type: "set end"; payload: boolean };
 
@@ -170,6 +171,12 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                     wpmCount: action.payload
                 };
             }
+            case "set cpm": {
+                return {
+                    ...state,
+                    cpmCount: action.payload
+                };
+            }
             case "set accuracy": {
                 return {
                     ...state,
@@ -203,16 +210,16 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
         };
     }, [state.isRunning]);
 
-    function endGame() {
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
-        dispatch({ type: "set running", payload: false });
-        dispatch({ type: "set typing", payload: false });
-        dispatch({ type: "set time", payload: 0 });
-        clearInterval(timeRef.current);
-        dispatch({ type: "set wrong", payload: 0 });
-    }
+    // function endGame() {
+    //     if (inputRef.current) {
+    //         inputRef.current.value = "";
+    //     }
+    //     dispatch({ type: "set running", payload: false });
+    //     dispatch({ type: "set typing", payload: false });
+    //     dispatch({ type: "set time", payload: 0 });
+    //     clearInterval(timeRef.current);
+    //     dispatch({ type: "set wrong", payload: 0 });
+    // }
 
     function resetTimer() {
         if (inputRef.current) {
@@ -226,8 +233,10 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
         clearInterval(timeRef.current);
         dispatch({ type: "set mistake", payload: 0 });
         dispatch({ type: "set wpm", payload: 0 });
+        dispatch({ type: "set cpm", payload: 0 });
         dispatch({ type: "set accuracy", payload: 0 });
         dispatch({ type: "set wrong", payload: 0 });
+        dispatch({ type: "set end", payload: false });
     }
     return (
         <TypeStateContext.Provider
