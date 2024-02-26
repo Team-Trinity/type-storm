@@ -22,6 +22,7 @@ type stateType = {
     mistakeCount: number;
     wrongCount: number;
     wpmCount: number;
+    cpmCount: number;
     accuracy: number;
 };
 
@@ -36,7 +37,8 @@ type stateAction =
     | { type: "set mistake"; payload: number }
     | { type: "set wrong"; payload: number }
     | { type: "set wpm"; payload: number }
-    | { type: "set accuracy"; payload: number };
+    | { type: "set accuracy"; payload: number }
+    | { type: "set end"; payload: boolean };
 
 type contexType = {
     state: stateType;
@@ -55,6 +57,7 @@ const initialState: stateType = {
     mistakeCount: 0,
     wrongCount: 0,
     wpmCount: 0,
+    cpmCount: 0,
     accuracy: 0
 };
 
@@ -107,7 +110,8 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                 return {
                     ...state,
                     timePassed: state.timePassed + 1,
-                    wpmCount: wpm
+                    wpmCount: wpm,
+                    cpmCount: letterPerMinute
                 };
             }
             case "set text": {
@@ -170,6 +174,12 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                 return {
                     ...state,
                     accuracy: action.payload
+                };
+            }
+            case "set end": {
+                return {
+                    ...state,
+                    isEnd: action.payload
                 };
             }
         }

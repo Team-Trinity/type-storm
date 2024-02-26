@@ -66,6 +66,7 @@ export default function TypeBox() {
         // Dirty code here. Some issue with useState not syncing properly thats why had to +1 the typed.length
         if (state.typedLetters.length + 1 >= state.currentText.length) {
             dispatch({ type: "set running", payload: false });
+            dispatch({ type: "set end", payload: true });
         } else if (state.typedLetters.length > 0 && !state.isRunning) {
             dispatch({ type: "set running", payload: true });
         }
@@ -209,30 +210,28 @@ export default function TypeBox() {
                     </div>
                 )}
                 {/* End Screen */}
-                {!state.isRunning &&
-                    state.typedLetters.length === state.currentText.length &&
-                    state.currentText.length > 0 && (
-                        <div
-                            className={cn(
-                                "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
-                                inter.className
-                            )}
-                        >
-                            <Trophy className="mb-5 mt-2 " size={90} />
-                            <div className="text-center text-6xl">
-                                {state.wpmCount}
-                                <span className="text-3xl"> WPM</span>
-                            </div>
-                            {/* <div className="row-span-2 w-full text-center text-4xl">
+                {state.isEnd && (
+                    <div
+                        className={cn(
+                            "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
+                            inter.className
+                        )}
+                    >
+                        <Trophy className="mb-5 mt-2 " size={90} />
+                        <div className="text-center text-6xl">
+                            {state.wpmCount}
+                            <span className="text-3xl"> WPM</span>
+                        </div>
+                        {/* <div className="row-span-2 w-full text-center text-4xl">
                                 {state.timePassed}
                                 <span className="text-xl"> s</span>
                             </div> */}
-                            <div className="text-center text-5xl">
-                                {state.accuracy}%{" "}
-                                <span className="text-3xl">accuracy</span>
-                            </div>
+                        <div className="text-center text-5xl">
+                            {state.accuracy}%{" "}
+                            <span className="text-3xl">accuracy</span>
                         </div>
-                    )}
+                    </div>
+                )}
                 {/* Loading Skeleton */}
                 {state.currentText.length === 0 && (
                     <div
