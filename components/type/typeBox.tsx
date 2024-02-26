@@ -3,7 +3,13 @@
 import useText from "@/hooks/useText";
 import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
-import { ChevronRight, RefreshCw, RotateCcw, Trophy, MousePointerClick } from "lucide-react";
+import {
+    ChevronRight,
+    RefreshCw,
+    RotateCcw,
+    Trophy,
+    MousePointerClick
+} from "lucide-react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
@@ -74,11 +80,11 @@ export default function TypeBox() {
         resetTimer();
     }
     function nextHandler() {
+        resetTimer();
         dispatch({
             type: "set text",
             payload: state.currentText.split(" ").length
         });
-        resetTimer();
     }
 
     return (
@@ -141,7 +147,7 @@ export default function TypeBox() {
                     })}
                 </span>
                 {inputRef && (
-                    <input
+                    <textarea
                         autoFocus
                         onFocus={() => setIsOverlay(false)}
                         onBlur={() =>
@@ -160,25 +166,23 @@ export default function TypeBox() {
                             e.preventDefault();
                             return false;
                         }}
-                        onSelect={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
+                        // onSelect={(e) => {
+                        //     e.preventDefault();
+                        //     return false;
+                        // }}
                         onContextMenu={(e) => {
                             e.preventDefault();
                             return false;
                         }}
-                        onDrag={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
-                        style={{
-                            WebkitUserSelect: "none",
-                            msUserSelect: "none",
-                            MozUserSelect: "none"
-                        }}
+                        // onDrag={(e) => {
+                        //     e.preventDefault();
+                        //     return false;
+                        // }}
+                        autoComplete="false"
+                        autoCorrect="false"
+                        contextMenu="false"
+                        draggable="false"
                         maxLength={state.currentText.length}
-                        type="text"
                         ref={inputRef}
                         disabled={
                             state.typedLetters.length > 1 &&

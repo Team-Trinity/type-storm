@@ -42,7 +42,7 @@ type contexType = {
     state: stateType;
     dispatch: Dispatch<stateAction>;
     timeRef: MutableRefObject<NodeJS.Timeout | undefined>;
-    inputRef: RefObject<HTMLInputElement>;
+    inputRef: RefObject<HTMLTextAreaElement>;
     resetTimer: () => void;
 };
 const initialState: stateType = {
@@ -69,7 +69,7 @@ export const TypeStateContext = createContext<contexType>({
 const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
     const [getText] = useText();
     const timeRef = useRef<NodeJS.Timeout>();
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     // const correctLetters = state.currentText.split("");
     // const words = state.currentText.split(" ");
