@@ -22,6 +22,7 @@ type stateType = {
     mistakeCount: number;
     wrongCount: number;
     wpmCount: number;
+    cpmCount: number;
     accuracy: number;
 };
 
@@ -36,7 +37,10 @@ type stateAction =
     | { type: "set mistake"; payload: number }
     | { type: "set wrong"; payload: number }
     | { type: "set wpm"; payload: number }
-    | { type: "set accuracy"; payload: number };
+    | { type: "set cpm"; payload: number }
+    | { type: "set accuracy"; payload: number }
+    | { type: "set end"; payload: boolean }
+    | { type: "reset" };
 
 type contexType = {
     state: stateType;
@@ -55,6 +59,7 @@ const initialState: stateType = {
     mistakeCount: 0,
     wrongCount: 0,
     wpmCount: 0,
+    cpmCount: 0,
     accuracy: 0
 };
 
@@ -107,7 +112,8 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                 return {
                     ...state,
                     timePassed: state.timePassed + 1,
-                    wpmCount: wpm
+                    wpmCount: wpm,
+                    cpmCount: letterPerMinute
                 };
             }
             case "set text": {
@@ -166,10 +172,38 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                     wpmCount: action.payload
                 };
             }
+            case "set cpm": {
+                return {
+                    ...state,
+                    cpmCount: action.payload
+                };
+            }
             case "set accuracy": {
                 return {
                     ...state,
                     accuracy: action.payload
+                };
+            }
+            case "set end": {
+                return {
+                    ...state,
+                    isEnd: action.payload
+                };
+            }
+            case "reset": {
+                clearInterval(timeRef.current);
+                return {
+                    ...state,
+                    typedLetters : "",
+                    isRunning : false,
+                    isTyping : false,
+                    timePassed : 0,
+                    mistakeCount : 0,
+                    wpmCount : 0,
+                    cpmCount : 0,
+                    accuracy : 0,
+                    wrongCount : 0,
+                    isEnd : false
                 };
             }
         }
@@ -193,31 +227,13 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
         };
     }, [state.isRunning]);
 
-    function endGame() {
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
-        dispatch({ type: "set running", payload: false });
-        dispatch({ type: "set typing", payload: false });
-        dispatch({ type: "set time", payload: 0 });
-        clearInterval(timeRef.current);
-        dispatch({ type: "set wrong", payload: 0 });
-    }
-
     function resetTimer() {
+        dispatch({type : "reset"});
+        
         if (inputRef.current) {
             inputRef.current.value = "";
             inputRef.current.focus();
         }
-        dispatch({ type: "set typed", payload: "" });
-        dispatch({ type: "set running", payload: false });
-        dispatch({ type: "set typing", payload: false });
-        dispatch({ type: "set time", payload: 0 });
-        clearInterval(timeRef.current);
-        dispatch({ type: "set mistake", payload: 0 });
-        dispatch({ type: "set wpm", payload: 0 });
-        dispatch({ type: "set accuracy", payload: 0 });
-        dispatch({ type: "set wrong", payload: 0 });
     }
     return (
         <TypeStateContext.Provider
