@@ -229,6 +229,7 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
 
     function resetTimer() {
         dispatch({type : "reset"});
+        
         if (inputRef.current) {
             inputRef.current.value = "";
             inputRef.current.focus();

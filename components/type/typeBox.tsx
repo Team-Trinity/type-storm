@@ -78,14 +78,18 @@ export default function TypeBox() {
     }
 
     function resetHandler() {
-        resetTimer();
+        setTimeout(() => {
+            resetTimer();
+        }, 0);
     }
     function nextHandler() {
-        resetTimer();
         dispatch({
             type: "set text",
             payload: state.currentText.split(" ").length
         });
+        setTimeout(() => {
+            resetTimer();
+        }, 0);
     }
 
     return (
@@ -115,7 +119,7 @@ export default function TypeBox() {
             />
             <div
                 className={cn(
-                    "relative min-h-80 w-full p-5 text-xl font-semibold tracking-tighter transition-all",
+                    "relative min-h-80 w-full p-5 text-xl font-semibold tracking-tighter transition-all text-wrap",
                     jetbrains_mono.className
                     // { "border border-red-200": isTyping }
                 )}
@@ -147,8 +151,7 @@ export default function TypeBox() {
                         );
                     })}
                 </span>
-                {inputRef && (
-                    <textarea
+                <textarea
                         autoFocus
                         onFocus={() => setIsOverlay(false)}
                         onBlur={() =>
@@ -180,9 +183,9 @@ export default function TypeBox() {
                         //     return false;
                         // }}
                         autoComplete="false"
-                        autoCorrect="false"
                         contextMenu="false"
                         draggable="false"
+                        tabIndex={-1}
                         maxLength={state.currentText.length}
                         ref={inputRef}
                         disabled={
@@ -193,10 +196,9 @@ export default function TypeBox() {
                             !state.isRunning
                         }
                         name="type-input"
-                        className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-0"
+                        className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-50"
                         onChange={(e) => changeHandler(e.target.value)}
                     />
-                )}
                 {/* Focus loss overlay */}
                 {isOverlay && (
                     <div
@@ -210,7 +212,7 @@ export default function TypeBox() {
                     </div>
                 )}
                 {/* End Screen */}
-                {state.isEnd && (
+                {state.typedLetters.length === state.currentText.length && state.timePassed > 0 && (
                     <div
                         className={cn(
                             "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
