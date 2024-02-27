@@ -196,7 +196,7 @@ export default function TypeBox() {
                             !state.isRunning
                         }
                         name="type-input"
-                        className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-50"
+                        className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-0"
                         onChange={(e) => changeHandler(e.target.value)}
                     />
                 {/* Focus loss overlay */}
