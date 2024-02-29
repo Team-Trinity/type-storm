@@ -1,10 +1,9 @@
 type user = {
-    name: string;
+    name?: string;
     email: string;
-    role: string;
-    lessonsTaken: number;
+    role?: string;
     wpmRecords: number[];
     cpmRecords: number[];
     accuracyRecords: number[];
-    praticeTime: number;
+    praticeTime?: number;
 };

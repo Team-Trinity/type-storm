@@ -15,17 +15,38 @@ import { useContext, useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
+import axios from "axios";
+import { AuthContext } from "@/providers/AuthProvider";
 
 const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
 export default function TypeBox() {
+    const [initialUserData, setInitialUserData] = useState < user > ()
+    const{user} = useContext(AuthContext)
     const { state, dispatch, inputRef, resetTimer } =
         useContext(TypeStateContext);
 
     const [isOverlay, setIsOverlay] = useState(false);
 
     const [getText] = useText();
+    useEffect(()=> {
+        user && axios.get(`https://type-storm-server-one.vercel.app/api/v1/users/data?email=${user.email}`).then(response => {
+            setInitialUserData(response?.data)
+            console.log(response?.data);
+        }).catch(error => {
+            console.log("initial data from typeBox: >>>", error);
+        } )
+        
+    },[user])
+    useEffect(()=> {
+        if(state.isEnd && user && initialUserData){
+            const data: user = {
+                email: user.email as string, wpmRecords: [...initialUserData?.wpmRecords, state.wpmCount], accuracyRecords: [...initialUserData?.accuracyRecords, state.accuracy], cpmRecords: [...initialUserData?.cpmRecords, state.cpmCount]
+            }           
+            axios.post(`https://type-storm-server-one.vercel.app/api/v1/users/${user.email}/wpm-accuracy-records`, data)
+        }
+    },[state.isEnd])
     useEffect(() => {
         dispatch({ type: "set text", payload: 20 });
     }, []);
