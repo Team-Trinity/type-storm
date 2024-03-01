@@ -31,7 +31,11 @@ export default function LetterElement({
             {typedLetter && typedLetter !== correctLetter ? (
                 <span className="text-red-500 underline dark:text-red-400">
                     <span>
-                        {correctLetter}
+                        {correctLetter === " " ? (
+                            <> {` ${correctLetter} `} </>
+                        ) : (
+                            correctLetter
+                        )}
                         <span
                             className={clsx({
                                 "animate-none": state.isTyping,
@@ -45,10 +49,14 @@ export default function LetterElement({
                 </span>
             ) : (
                 <span
-                    className={`${typedLetter && correctLetter === typedLetter ? "text-green-500 dark:text-green-300" : "text-gray-500"}`}
+                    className={`${typedLetter && correctLetter === typedLetter ? "text-green-500 dark:text-green-400" : "text-gray-400"}`}
                 >
                     <span>
-                        {correctLetter}
+                        {correctLetter === " " ? (
+                            <> {` ${correctLetter} `} </>
+                        ) : (
+                            correctLetter
+                        )}
                         <span
                             className={clsx({
                                 "animate-none": state.isTyping,
