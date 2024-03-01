@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useServer from "@/hooks/useServer";
 import { AuthContext } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
@@ -9,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 export default function Register() {
     const authContext = useContext(AuthContext);
     const router = useRouter();
-
+    const {saveUser} = useServer()
     const {
         control,
         handleSubmit,
@@ -26,6 +27,7 @@ export default function Register() {
                 authContext.updateUser(result.user, data.name);
             })
             .then(() => {
+                saveUser(data.email)
                 console.log("User profile created successfully");
             })
             .catch((error) => {

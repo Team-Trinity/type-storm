@@ -52,7 +52,7 @@ export const AuthContext = createContext(defaultAuthState);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const [saveUser] = useServer();
+    const {saveUser} = useServer();
 
     const createUser: createUser = async (email: string, password: string) => {
         setLoading(true);
@@ -61,8 +61,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                 auth,
                 email,
                 password
-            );
-            saveUser(email, "student");
+            )
+            // saveUser(email, "student");
             setLoading(false);
             return userCredential;
         } catch (error) {
