@@ -32,9 +32,11 @@ export default function useServer() {
     async function getHighScores() {
         try{
             const response = await axios.get("https://type-storm-server-one.vercel.app/api/v1/users/dashboard/high-scores");
-            return response.data;
+            console.log("High scores data:", response?.data);
+            return response?.data;
         } catch(error){
             console.log("Error while getting high scores: ", error);
+            throw error;
         }
     }
 

@@ -47,6 +47,7 @@ export default function TypeBox() {
             axios.post(`https://type-storm-server-one.vercel.app/api/v1/users/${user.email}/wpm-accuracy-records`, data)
         }
     },[state.isEnd])
+    
     useEffect(() => {
         dispatch({ type: "set text", payload: 20 });
     }, []);
