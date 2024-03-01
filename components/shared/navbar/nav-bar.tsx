@@ -11,7 +11,7 @@ const NavBar = () => {
     const { user } = useContext(AuthContext);
     return (
         <div>
-            <nav className="mb-20 flex items-center border-b px-10 py-8">
+            <nav className="mb-20 flex items-center border-b px-10 py-6">
                 <div className="flex-grow">
                     {/* <img src="/Logo.svg" alt="navigateui logo" /> */}
                     <Link href={"/"}>
