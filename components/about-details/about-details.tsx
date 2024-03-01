@@ -6,7 +6,7 @@ const AboutDetails = () => {
         <div>
             <section className="from-#52C2FF flex w-full flex-col justify-center py-8 md:py-16 lg:py-20">
                 <div className="container px-4 md:px-6">
-                    <div className="flex flex-col items-center space-y-4 text-center text-gray-300">
+                    <div className="flex flex-col items-center space-y-4 text-center text-primary">
                         {/* Text content */}
                         <div className="space-y-2">
                             <h1 className="sm:text-1xl text-2xl font-semibold tracking-tighter md:text-2xl lg:text-3xl">
@@ -18,16 +18,14 @@ const AboutDetails = () => {
                         </div>
                         <div className="space-x-4 pt-4">
                             <Link href={"/"}>
-                                <Button className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
-                                    Test Your Skill
-                                </Button>
+                                <Button>Test Your Skill</Button>
                             </Link>
                         </div>
                     </div>
                 </div>
                 {/* Feature Cards */}
                 <div className="container mt-16 flex flex-wrap items-center justify-center gap-9 px-4 md:px-6">
-                    <div className="flex flex-col items-center text-center text-gray-300">
+                    <div className="flex flex-col items-center text-center text-primary">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={24}
@@ -52,7 +50,7 @@ const AboutDetails = () => {
                             depending on your speed
                         </p>
                     </div>
-                    <div className="flex flex-col items-center text-center text-gray-300">
+                    <div className="flex flex-col items-center text-center text-primary">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={24}
@@ -76,7 +74,7 @@ const AboutDetails = () => {
                             your speed fast.
                         </p>
                     </div>
-                    <div className="flex flex-col items-center text-center text-gray-300">
+                    <div className="flex flex-col items-center text-center text-primary">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width={24}

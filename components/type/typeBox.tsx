@@ -5,18 +5,18 @@ import { cn } from "@/lib/utils";
 import { TypeStateContext } from "@/providers/TypeStateProvider";
 import {
     ChevronRight,
+    MousePointerClick,
     RefreshCw,
     RotateCcw,
-    Trophy,
-    MousePointerClick
+    Trophy
 } from "lucide-react";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, Roboto_Condensed } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import Letter from "./letterElement";
 import TextSelector from "./textSelector";
 
-const jetbrains_mono = JetBrains_Mono({ subsets: ["latin"] });
+const roboto_condensed = Roboto_Condensed({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
 export default function TypeBox() {
@@ -119,8 +119,8 @@ export default function TypeBox() {
             />
             <div
                 className={cn(
-                    "relative min-h-80 w-full p-5 text-xl font-semibold tracking-tighter transition-all text-wrap",
-                    jetbrains_mono.className
+                    "relative min-h-80 w-full text-wrap p-5 text-3xl font-normal leading-[3.5rem] tracking-tighter transition-all",
+                    roboto_condensed.className
                     // { "border border-red-200": isTyping }
                 )}
             >
@@ -152,53 +152,53 @@ export default function TypeBox() {
                     })}
                 </span>
                 <textarea
-                        autoFocus
-                        onFocus={() => setIsOverlay(false)}
-                        onBlur={() =>
-                            state.currentText.length > 0 && setIsOverlay(true)
-                        }
-                        //disable various interactions on input box
-                        onCopy={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
-                        onCut={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
-                        onPaste={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
-                        // onSelect={(e) => {
-                        //     e.preventDefault();
-                        //     return false;
-                        // }}
-                        onContextMenu={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
-                        // onDrag={(e) => {
-                        //     e.preventDefault();
-                        //     return false;
-                        // }}
-                        autoComplete="false"
-                        contextMenu="false"
-                        draggable="false"
-                        tabIndex={-1}
-                        maxLength={state.currentText.length}
-                        ref={inputRef}
-                        disabled={
-                            state.typedLetters.length > 1 &&
-                            // Check if the last typed letter is correct or not then disable it
-                            state.typedLetters.slice(-1) ===
-                                state.currentText.slice(-1) &&
-                            !state.isRunning
-                        }
-                        name="type-input"
-                        className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-0"
-                        onChange={(e) => changeHandler(e.target.value)}
-                    />
+                    autoFocus
+                    onFocus={() => setIsOverlay(false)}
+                    onBlur={() =>
+                        state.currentText.length > 0 && setIsOverlay(true)
+                    }
+                    //disable various interactions on input box
+                    onCopy={(e) => {
+                        e.preventDefault();
+                        return false;
+                    }}
+                    onCut={(e) => {
+                        e.preventDefault();
+                        return false;
+                    }}
+                    onPaste={(e) => {
+                        e.preventDefault();
+                        return false;
+                    }}
+                    // onSelect={(e) => {
+                    //     e.preventDefault();
+                    //     return false;
+                    // }}
+                    onContextMenu={(e) => {
+                        e.preventDefault();
+                        return false;
+                    }}
+                    // onDrag={(e) => {
+                    //     e.preventDefault();
+                    //     return false;
+                    // }}
+                    autoComplete="false"
+                    contextMenu="false"
+                    draggable="false"
+                    tabIndex={-1}
+                    maxLength={state.currentText.length}
+                    ref={inputRef}
+                    disabled={
+                        state.typedLetters.length > 1 &&
+                        // Check if the last typed letter is correct or not then disable it
+                        state.typedLetters.slice(-1) ===
+                            state.currentText.slice(-1) &&
+                        !state.isRunning
+                    }
+                    name="type-input"
+                    className="absolute left-0 top-0 z-50 h-full w-full select-none opacity-0"
+                    onChange={(e) => changeHandler(e.target.value)}
+                />
                 {/* Focus loss overlay */}
                 {isOverlay && (
                     <div
@@ -212,28 +212,29 @@ export default function TypeBox() {
                     </div>
                 )}
                 {/* End Screen */}
-                {state.typedLetters.length === state.currentText.length && state.timePassed > 0 && (
-                    <div
-                        className={cn(
-                            "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
-                            inter.className
-                        )}
-                    >
-                        <Trophy className="mb-5 mt-2 " size={90} />
-                        <div className="text-center text-6xl">
-                            {state.wpmCount}
-                            <span className="text-3xl"> WPM</span>
-                        </div>
-                        {/* <div className="row-span-2 w-full text-center text-4xl">
+                {state.typedLetters.length === state.currentText.length &&
+                    state.timePassed > 0 && (
+                        <div
+                            className={cn(
+                                "absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-start text-5xl backdrop-blur-md transition-all",
+                                inter.className
+                            )}
+                        >
+                            <Trophy className="mb-5 mt-2 " size={90} />
+                            <div className="text-center text-6xl">
+                                {state.wpmCount}
+                                <span className="text-3xl"> WPM</span>
+                            </div>
+                            {/* <div className="row-span-2 w-full text-center text-4xl">
                                 {state.timePassed}
                                 <span className="text-xl"> s</span>
                             </div> */}
-                        <div className="text-center text-5xl">
-                            {state.accuracy}%{" "}
-                            <span className="text-3xl">accuracy</span>
+                            <div className="text-center text-5xl">
+                                {state.accuracy}%{" "}
+                                <span className="text-3xl">accuracy</span>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
                 {/* Loading Skeleton */}
                 {state.currentText.length === 0 && (
                     <div
