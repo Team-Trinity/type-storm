@@ -15,62 +15,58 @@ const MyProfile = () => {
                         alt=""
                     /> */}
                     <div className="ml-8">
-                        <h2 className="font-sans text-3xl font-medium text-gray-400">
+                        <h2 className="font-sans text-3xl font-medium text-primary">
                             {user?.displayName}
                         </h2>
-                        <p className="text-md font-sans text-gray-500">
+                        <p className="text-md font-sans text-primary">
                             joined 21 Feb 2024
                         </p>
                     </div>
                 </div>
                 <div className="flex flex-row justify-center gap-8 p-10 text-center">
                     <div className="space-y-1">
-                        <p className="text-md font-sans text-gray-400">
+                        <p className="text-md font-sans text-primary">
                             Top Speed
                         </p>
-                        <p className="text-3xl tracking-wider text-gray-600">
+                        <p className="text-3xl tracking-wider text-primary">
                             230
                         </p>
                     </div>
                     <div className="space-y-1">
-                        <p className="text-md font-sans text-gray-400">
-                           Average Speed
+                        <p className="text-md font-sans text-primary">
+                            Average Speed
                         </p>
-                        <p className="text-3xl tracking-wider text-gray-600">
+                        <p className="text-3xl tracking-wider text-primary">
                             1010
                         </p>
                     </div>
                     <div className="space-y-1">
-                        <p className="text-md font-sans text-gray-400">
+                        <p className="text-md font-sans text-primary">
                             Words Typed
                         </p>
-                        <p className="text-3xl tracking-wider text-gray-600">
+                        <p className="text-3xl tracking-wider text-primary">
                             65
                         </p>
                     </div>
                     <div className="space-y-1">
-                        <p className="text-md font-sans text-gray-400">
+                        <p className="text-md font-sans text-primary">
                             Lessions
                         </p>
-                        <p className="text-3xl tracking-wider text-gray-600">
+                        <p className="text-3xl tracking-wider text-primary">
                             223
                         </p>
                     </div>
                     <div className="space-y-1">
-                        <p className="text-md font-sans text-gray-400">
+                        <p className="text-md font-sans text-primary">
                             Accuracy
                         </p>
-                        <p className="text-3xl tracking-wider text-gray-600">
+                        <p className="text-3xl tracking-wider text-primary">
                             95%
                         </p>
                     </div>
-                    
                 </div>
-                <div className="flex flex-row justify-between gap-8 p-10 ">
-                
-
-                </div>
-                <div className="flex flex-row items-center gap-4 p-10 border-l-2">
+                <div className="flex flex-row justify-between gap-8 p-10 "></div>
+                <div className="flex flex-row items-center gap-4 border-l-2 p-10">
                     <Button>Edit</Button>
                     <Button>Copy Profile</Button>
                 </div>
