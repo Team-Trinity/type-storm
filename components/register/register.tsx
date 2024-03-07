@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 export default function Register() {
     const authContext = useContext(AuthContext);
     const router = useRouter();
-    const {saveUser} = useServer()
+    const { createUserData } = useServer();
     const {
         control,
         handleSubmit,
@@ -19,7 +19,11 @@ export default function Register() {
         reset
     } = useForm<any>();
 
-    const submitHandler = async (data: any) => {
+    const submitHandler = async (data: {
+        email: string;
+        password: string;
+        name: string;
+    }) => {
         authContext
             .createUser(data.email, data.password)
             .then((result) => {
@@ -27,7 +31,15 @@ export default function Register() {
                 authContext.updateUser(result.user, data.name);
             })
             .then(() => {
-                saveUser(data.email)
+                createUserData({
+                    email: data.email,
+                    name: data.name,
+                    role: "student",
+                    accuracyRecords: [],
+                    cpmRecords: [],
+                    wpmRecords: [],
+                    praticeTime: 0
+                });
                 console.log("User profile created successfully");
             })
             .catch((error) => {
