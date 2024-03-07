@@ -8,16 +8,19 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     // const { getHighScores } = useServer();
-    const [highScores, setHighScores] = useState([]);
+    const [usersData, setUsersData] = useState<user[]>();
+    const { getUsers } = useServer();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(
-                    "https://type-storm-server-one.vercel.app/api/v1/users/dashboard/high-scores"
-                );
-                setHighScores(response?.data);
-                console.log(response?.data);
+                const userData = await getUsers();
+                const sortedData = userData.sort((a, b) => {
+                    return (
+                        Math.max(...b.wpmRecords) - Math.max(...a.wpmRecords)
+                    );
+                });
+                setUsersData(sortedData);
             } catch (error) {
                 console.log(error);
                 throw error;
@@ -48,9 +51,24 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody>
-                            {highScores.map((highScore, index) => (
-                                <HighScores key={index} highScore={highScore} index={index}></HighScores>
-                            ))}
+                            {usersData?.map((user, index) => {
+                                return (
+                                    <tr key={index} className="">
+                                        <td className="border-b px-6 py-4">
+                                            {user.name}
+                                        </td>
+                                        <td className="border-b px-6 py-4">
+                                            {Math.max(...user.wpmRecords)}
+                                        </td>
+                                        <td className="border-b px-6 py-4">
+                                            {Math.max(...user.cpmRecords)}
+                                        </td>
+                                        <td className="border-b px-6 py-4 text-end">
+                                            {index + 1}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
