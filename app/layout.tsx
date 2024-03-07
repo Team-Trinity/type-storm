@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/providers/themeProvider";
 // import { NavBar } from "@/components/shared/Footer/NavBar";
 import AuthProvider from "@/providers/AuthProvider";
 import NavBar from "@/components/shared/navbar/nav-bar";
+import TypeStateProvider from "@/providers/TypeStateProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,11 +35,13 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <AuthProvider>
-                        <NavBar></NavBar>
-                        <main className="flex-grow">{children}</main>
-                        <Footer />
-                    </AuthProvider>
+                    <TypeStateProvider>
+                        <AuthProvider>
+                            <NavBar />{" "}
+                            <main className="flex-grow">{children}</main>
+                            <Footer />
+                        </AuthProvider>
+                    </TypeStateProvider>
                 </ThemeProvider>
             </body>
         </html>

@@ -6,9 +6,7 @@ import TypeStateProvider from "@/providers/TypeStateProvider";
 export default function Home() {
     return (
         <div>
-            <TypeStateProvider>
-                <TypeBox />
-            </TypeStateProvider>
+            <TypeBox />
         </div>
     );
 }
