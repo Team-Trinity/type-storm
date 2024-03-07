@@ -214,7 +214,6 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                 };
             }
             case "set end": {
-                dispatch({ type: "reset" });
                 return {
                     ...state,
                     isEnd: action.payload

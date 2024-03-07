@@ -47,6 +47,9 @@ export default function TypeBox() {
 
     useEffect(() => {
         dispatch({ type: "set text", payload: 20 });
+        return () => {
+            dispatch({ type: "reset" });
+        }
     }, []);
 
     useEffect(() => {
