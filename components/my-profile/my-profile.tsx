@@ -32,7 +32,9 @@ const MyProfile = () => {
                             Top Speed
                         </p>
                         <p className="text-3xl tracking-wider text-primary">
-                            {Math.max(...state.user.wpmRecords)}
+                            {state.user.wpmRecords.length > 0
+                                ? Math.max(...state.user.wpmRecords)
+                                : 0}
                         </p>
                     </div>
                     <div className="space-y-1">

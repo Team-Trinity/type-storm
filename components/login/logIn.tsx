@@ -135,6 +135,7 @@ function Login() {
                     variant="outline"
                     type="button"
                     onClick={googleLoginHandler}
+                    disabled
                 >
                     <Icons.google className="mr-2 h-4 w-4" />
                     Google
@@ -143,6 +144,7 @@ function Login() {
                     variant="outline"
                     type="button"
                     onClick={gitHubLoginHandler}
+                    disabled
                 >
                     <Icons.gitHub className="mr-2 h-4 w-4" />
                     GitHub

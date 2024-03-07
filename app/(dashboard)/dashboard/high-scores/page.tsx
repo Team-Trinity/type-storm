@@ -58,10 +58,18 @@ export default function Page() {
                                             {user.name}
                                         </td>
                                         <td className="border-b px-6 py-4">
-                                            {Math.max(...user.wpmRecords)}
+                                            {user.wpmRecords.length > 0
+                                                ? Math.max(...user.wpmRecords)
+                                                : 0}
                                         </td>
                                         <td className="border-b px-6 py-4">
-                                            {Math.max(...user.cpmRecords)}
+                                            {user.cpmRecords.length > 0
+                                                ? Math.floor(
+                                                      Math.max(
+                                                          ...user.cpmRecords
+                                                      )
+                                                  )
+                                                : 0}
                                         </td>
                                         <td className="border-b px-6 py-4 text-end">
                                             {index + 1}
