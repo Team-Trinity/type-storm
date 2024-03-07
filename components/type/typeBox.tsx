@@ -17,6 +17,7 @@ import Letter from "./letterElement";
 import TextSelector from "./textSelector";
 import axios from "axios";
 import { AuthContext } from "@/providers/AuthProvider";
+import useServer from "@/hooks/useServer";
 
 const roboto_condensed = Roboto_Condensed({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -30,23 +31,19 @@ export default function TypeBox() {
     const [isOverlay, setIsOverlay] = useState(false);
 
     const [getText] = useText();
-    // useEffect(()=> {
-    //     user && axios.get(`https://type-storm-server-one.vercel.app/api/v1/users/data?email=${user.email}`).then(response => {
-    //         setInitialUserData(response?.data)
-    //         console.log(response?.data);
-    //     }).catch(error => {
-    //         console.log("initial data from typeBox: >>>", error);
-    //     } )
 
-    // },[user])
-    // useEffect(()=> {
-    //     if(state.isEnd && user && initialUserData){
-    //         const data: user = {
-    //             email: user.email as string, wpmRecords: [...initialUserData?.wpmRecords, state.wpmCount], accuracyRecords: [...initialUserData?.accuracyRecords, state.accuracy], cpmRecords: [...initialUserData?.cpmRecords, state.cpmCount]
-    //         }
-    //         axios.post(`https://type-storm-server-one.vercel.app/api/v1/users/${user.email}/wpm-accuracy-records`, data)
-    //     }
-    // },[state.isEnd])
+    const { updateUserByEmail } = useServer();
+
+    useEffect(() => {
+        if (state.isEnd) {
+            const data: user = { ...state.user };
+            data.wpmRecords.push(state.wpmCount);
+            data.cpmRecords.push(state.cpmCount);
+            data.accuracyRecords.push(state.accuracy);
+            data.praticeTime = (data.praticeTime as number) + state.timePassed;
+            updateUserByEmail(data.email, data);
+        }
+    }, [state.isEnd]);
 
     useEffect(() => {
         dispatch({ type: "set text", payload: 20 });

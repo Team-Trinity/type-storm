@@ -1,44 +1,65 @@
+"use client";
+
 import { useContext } from "react";
 import { useAxios } from "./useAxios";
 import { AuthContext } from "@/providers/AuthProvider";
-import axios from "axios";
 
-// import axios from "axios";
+import axios from "axios";
 
 export default function useServer() {
     // const axios = useAxios();
 
-    const {user} = useContext(AuthContext)
-    const name = user?.displayName;
-    async function saveUser(
-        email: string,
-        // role: string
-        // lessonsTaken = 0,
-        // wpmRecords = [],
-        // cpmRecords = [],
-        // accuracryRecords = [],
-        // practiceTime = 0
-    ) {
-        const data : user = { name: name as string, email: email, role: "student", wpmRecords: [], cpmRecords: [], accuracyRecords: [], praticeTime: 0 };
-        try {
-            await axios.post("https://type-storm-server-one.vercel.app/api/v1/users/", data).then(() => {
-                console.log("User post successful", data);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const { user } = useContext(AuthContext);
 
-    async function getHighScores() {
-        try{
-            const response = await axios.get("https://type-storm-server-one.vercel.app/api/v1/users/dashboard/high-scores");
-            console.log("High scores data:", response?.data);
+    async function createUserData(data: user) {
+        try {
+            const response = await axios.post<user[]>(
+                "https://type-storm-server-one.vercel.app/api/v1/users",
+                data
+            );
             return response?.data;
-        } catch(error){
-            console.log("Error while getting high scores: ", error);
+        } catch (error) {
+            console.log("Error while creating new user data", error);
             throw error;
         }
     }
 
-    return {saveUser, getHighScores};
+    async function getUsers() {
+        try {
+            const response = await axios.get<user[]>(
+                "https://type-storm-server-one.vercel.app/api/v1/users"
+            );
+            return response?.data;
+        } catch (error) {
+            console.log("Error while getting all user data", error);
+            throw error;
+        }
+    }
+
+    async function updateUserByEmail(email: string, newData: user) {
+        try {
+            const response = await axios.patch<user[]>(
+                `https://type-storm-server-one.vercel.app/api/v1/users/${email}`,
+                newData
+            );
+            return response?.data;
+        } catch (error) {
+            console.log("Error while getting all user data", error);
+            throw error;
+        }
+    }
+
+    async function getUserByEmail(email: string) {
+        try {
+            const response = await axios.get<user>(
+                `https://type-storm-server-one.vercel.app/api/v1/users/${email}`
+            );
+            return response?.data;
+        } catch (error) {
+            console.log("Error while getting all user data", error);
+            throw error;
+        }
+    }
+
+    return { getUsers, getUserByEmail, updateUserByEmail, createUserData };
 }

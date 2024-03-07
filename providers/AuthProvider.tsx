@@ -13,7 +13,14 @@ import {
     updateProfile,
     onAuthStateChanged
 } from "firebase/auth";
-import React, { ReactNode, createContext, useEffect, useState } from "react";
+import React, {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useState
+} from "react";
+import { TypeStateContext } from "./TypeStateProvider";
 
 type createUser = (email: string, password: string) => Promise<UserCredential>;
 type signIn = (email: string, password: string) => Promise<UserCredential>;
@@ -52,7 +59,6 @@ export const AuthContext = createContext(defaultAuthState);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const {saveUser} = useServer();
 
     const createUser: createUser = async (email: string, password: string) => {
         setLoading(true);
@@ -61,8 +67,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                 auth,
                 email,
                 password
-            )
-            // saveUser(email, "student");
+            );
             setLoading(false);
             return userCredential;
         } catch (error) {
@@ -139,11 +144,22 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const { getUserByEmail } = useServer();
+    const { dispatch } = useContext(TypeStateContext);
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(
             auth,
             (currentUser: User | null) => {
                 setUser(currentUser);
+                if (currentUser) {
+                    getUserByEmail(currentUser.email as string).then(
+                        (userData) => {
+                            dispatch({ type: "set user", payload: userData });
+                        }
+                    );
+                } else if (currentUser === null) {
+                    dispatch({ type: "reset user" });
+                }
                 setLoading(false);
             }
         );

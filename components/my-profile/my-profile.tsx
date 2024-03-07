@@ -2,9 +2,12 @@
 import { AuthContext } from "@/providers/AuthProvider";
 import { useContext } from "react";
 import { Button } from "../ui/button";
+import { TypeStateContext } from "@/providers/TypeStateProvider";
+import { calculateAverage } from "@/lib/utils";
 
 const MyProfile = () => {
     const { user } = useContext(AuthContext);
+    const { state } = useContext(TypeStateContext);
     return (
         <div className="container mx-auto">
             <div className="my-20 flex flex-col shadow-[0px_7px_30px_2px_rgba(100,100,111,0.2)] md:flex-row">
@@ -29,7 +32,7 @@ const MyProfile = () => {
                             Top Speed
                         </p>
                         <p className="text-3xl tracking-wider text-primary">
-                            230
+                            {Math.max(...state.user.wpmRecords)}
                         </p>
                     </div>
                     <div className="space-y-1">
@@ -37,33 +40,55 @@ const MyProfile = () => {
                             Average Speed
                         </p>
                         <p className="text-3xl tracking-wider text-primary">
-                            1010
+                            {Math.floor(
+                                calculateAverage(state.user.wpmRecords)
+                            )}
                         </p>
                     </div>
-                    <div className="space-y-1">
+                    {/* <div className="space-y-1">
                         <p className="text-md font-sans text-primary">
                             Words Typed
                         </p>
                         <p className="text-3xl tracking-wider text-primary">
                             65
                         </p>
+                    </div> */}
+                    <div className="space-y-1">
+                        <p className="text-md font-sans text-primary">
+                            Average CPM
+                        </p>
+                        <p className="text-3xl tracking-wider text-primary">
+                            {Math.floor(
+                                calculateAverage(state.user.cpmRecords)
+                            )}
+                        </p>
                     </div>
                     <div className="space-y-1">
                         <p className="text-md font-sans text-primary">
-                            Lessions
+                            Lessons
                         </p>
                         <p className="text-3xl tracking-wider text-primary">
-                            223
+                            {state.user.wpmRecords.length}
                         </p>
                     </div>
                     <div className="space-y-1">
                         <p className="text-md font-sans text-primary">
-                            Accuracy
+                            Average Accuracy
                         </p>
                         <p className="text-3xl tracking-wider text-primary">
-                            95%
+                            {Math.floor(
+                                calculateAverage(state.user.accuracyRecords)
+                            )}
                         </p>
                     </div>
+                    {/* <div className="space-y-1">
+                        <p className="text-md font-sans text-primary">
+                            Practice Time
+                        </p>
+                        <p className="text-3xl tracking-wider text-primary">
+                            {state.user.praticeTime}
+                        </p>
+                    </div> */}
                 </div>
                 <div className="flex flex-row justify-between gap-8 p-10 "></div>
                 <div className="flex flex-row items-center gap-4 border-l-2 p-10">

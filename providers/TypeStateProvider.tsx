@@ -1,3 +1,6 @@
+"use client";
+
+import useServer from "@/hooks/useServer";
 import useText from "@/hooks/useText";
 import {
     Dispatch,
@@ -7,12 +10,15 @@ import {
     RefObject,
     createContext,
     useCallback,
+    useContext,
     useEffect,
     useReducer,
     useRef
 } from "react";
+import { AuthContext } from "./AuthProvider";
 
 type stateType = {
+    user: user;
     timePassed: number;
     isTyping: boolean;
     isRunning: boolean;
@@ -27,6 +33,8 @@ type stateType = {
 };
 
 type stateAction =
+    | { type: "set user"; payload: user }
+    | { type: "reset user" }
     | { type: "set time"; payload: number }
     | { type: "increase time" }
     | { type: "set text"; payload: number }
@@ -50,6 +58,15 @@ type contexType = {
     resetTimer: () => void;
 };
 const initialState: stateType = {
+    user: {
+        accuracyRecords: [],
+        cpmRecords: [],
+        email: "",
+        wpmRecords: [],
+        name: "",
+        praticeTime: 0,
+        role: ""
+    },
     timePassed: 0,
     isTyping: false,
     isRunning: false,
@@ -84,6 +101,18 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
         action: stateAction
     ): stateType {
         switch (action.type) {
+            case "set user": {
+                return {
+                    ...state,
+                    user: action.payload
+                };
+            }
+            case "reset user": {
+                return {
+                    ...state,
+                    user: initialState.user
+                };
+            }
             case "set time": {
                 return {
                     ...state,
@@ -194,16 +223,16 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
                 clearInterval(timeRef.current);
                 return {
                     ...state,
-                    typedLetters : "",
-                    isRunning : false,
-                    isTyping : false,
-                    timePassed : 0,
-                    mistakeCount : 0,
-                    wpmCount : 0,
-                    cpmCount : 0,
-                    accuracy : 0,
-                    wrongCount : 0,
-                    isEnd : false
+                    typedLetters: "",
+                    isRunning: false,
+                    isTyping: false,
+                    timePassed: 0,
+                    mistakeCount: 0,
+                    wpmCount: 0,
+                    cpmCount: 0,
+                    accuracy: 0,
+                    wrongCount: 0,
+                    isEnd: false
                 };
             }
         }
@@ -228,8 +257,8 @@ const TypeStateProvider = ({ children }: { children?: ReactNode }) => {
     }, [state.isRunning]);
 
     function resetTimer() {
-        dispatch({type : "reset"});
-        
+        dispatch({ type: "reset" });
+
         if (inputRef.current) {
             inputRef.current.value = "";
             inputRef.current.focus();
