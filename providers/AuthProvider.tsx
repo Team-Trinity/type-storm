@@ -154,6 +154,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                 if (currentUser) {
                     getUserByEmail(currentUser.email as string).then(
                         (userData) => {
+                            if (userData.wpmRecords === undefined) {
+                                userData.accuracyRecords = [];
+                                userData.cpmRecords = [];
+                                userData.wpmRecords = [];
+                                userData.praticeTime = 0;
+                            }
                             dispatch({ type: "set user", payload: userData });
                         }
                     );
